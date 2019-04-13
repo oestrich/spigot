@@ -5,8 +5,6 @@ defmodule Spigot.Sessions.Commands do
 
   use GenServer
 
-  require Logger
-
   alias Spigot.Router
   alias Spigot.Sessions.Views.Commands
   alias Spigot.Sessions.Views.Login
@@ -42,7 +40,15 @@ defmodule Spigot.Sessions.Commands do
   end
 
   defp process_command(state, text) do
-    Router.call(state, text)
+    case Router.call(state, text) do
+      {:error, :unknown} ->
+        send(state.foreman, {:send, Commands.render("unknown", state)})
+        send(state.foreman, {:send, Commands.render("prompt", state)})
+        {:noreply, state}
+
+      result ->
+        result
+    end
   end
 end
 

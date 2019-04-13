@@ -29,15 +29,24 @@ defmodule Spigot.Command.Router do
   def parse(patterns, text) do
     text = String.trim(text)
 
-    Enum.find_value(patterns, fn pattern ->
-      case match_pattern(pattern, text) do
-        nil ->
-          false
+    match =
+      Enum.find_value(patterns, fn pattern ->
+        case match_pattern(pattern, text) do
+          nil ->
+            false
 
-        captures ->
-          {pattern, captures}
-      end
-    end)
+          captures ->
+            {pattern, captures}
+        end
+      end)
+
+    case match != nil do
+      true ->
+        {:ok, match}
+
+      false ->
+        {:error, :unknown}
+    end
   end
 
   defp match_pattern(pattern, text) do
@@ -79,8 +88,13 @@ defmodule Spigot.Command.Router.Macro do
       unquote(parse_modules(module, opts[:do]))
 
       def call(state, text) do
-        {pattern, assigns} = parse(text)
-        receive(pattern, state, assigns)
+        case parse(text) do
+          {:ok, {pattern, assigns}} ->
+            receive(pattern, state, assigns)
+
+          {:error, :unknown} ->
+            {:error, :unknown}
+        end
       end
 
       def parse(text) do

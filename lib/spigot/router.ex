@@ -23,7 +23,6 @@ defmodule Spigot.Router do
 
     module(Vitals) do
       command("vitals", :base)
-      command("vitals :count", :count)
     end
   end
 end

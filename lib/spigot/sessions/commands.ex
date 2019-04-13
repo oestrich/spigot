@@ -16,11 +16,7 @@ defmodule Spigot.Sessions.Commands do
   def init(opts) do
     state = %{
       foreman: opts[:foreman],
-      character: opts[:character],
-      vitals: %{
-        health_points: 40,
-        max_health_points: 55
-      }
+      character: opts[:character]
     }
 
     {:ok, state}
@@ -29,6 +25,8 @@ defmodule Spigot.Sessions.Commands do
   def handle_info(:welcome, state) do
     send(state.foreman, {:send, Login.render("welcome", state)})
     send(state.foreman, {:send, Commands.render("prompt", state)})
+    send(state.character, {:send, :vitals})
+
     {:noreply, state}
   end
 
@@ -58,8 +56,6 @@ defmodule Spigot.Sessions.Commands.Combat do
 
   use Spigot, :command
 
-  alias Spigot.Sessions.Commands.Vitals
-
   def start(state, _) do
     push(state, render("start", state))
     push(state, render(Commands, "prompt", state))
@@ -77,10 +73,9 @@ defmodule Spigot.Sessions.Commands.Combat do
   end
 
   def tick(state, _) do
-    state = Vitals.adjust_vitals(state)
-
     push(state, render("tick", state))
     push(state, render(Commands, "prompt", state))
+    send(state.character, {:send, :vitals})
 
     {:noreply, state}
   end
@@ -134,33 +129,11 @@ defmodule Spigot.Sessions.Commands.Vitals do
 
   use Spigot, :command
 
-  @delay 1000
-
   def base(state, _) do
-    state = adjust_vitals(state)
-
     push(state, "Sending vitals...\n")
-    push(state, render("vitals", state))
+    send(state.character, {:send, :vitals})
     push(state, render(Commands, "prompt", state))
 
     {:noreply, state}
-  end
-
-  def count(state, %{"count" => count}) do
-    count = String.to_integer(count)
-
-    Enum.each(1..count, fn i ->
-      Process.send_after(self(), {:recv, "vitals"}, @delay * i)
-    end)
-
-    {:noreply, state}
-  end
-
-  def adjust_vitals(state) do
-    change = :rand.uniform(20) - 10
-    health_points = state.vitals.health_points + change
-    health_points = Enum.min([health_points, state.vitals.max_health_points])
-    vitals = Map.put(state.vitals, :health_points, health_points)
-    Map.put(state, :vitals, vitals)
   end
 end

@@ -4,6 +4,7 @@ defmodule Spigot.Telnet.Server do
   """
 
   alias Spigot.Sessions
+  alias Spigot.Sessions.Views.Output
   alias Spigot.Telnet.Options
 
   @behaviour :ranch_protocol
@@ -52,13 +53,32 @@ defmodule Spigot.Telnet.Server do
   end
 
   def handle_info({:send, data}, state) do
-    state.transport.send(state.socket, data)
+    push(state, data)
     {:noreply, state}
   end
 
   def handle_continue(:initial_iacs, state) do
     state.transport.send(state.socket, <<255, 251, 201>>)
     {:noreply, state}
+  end
+
+  defp push(state, data_list) when is_list(data_list) do
+    Enum.each(data_list, fn data ->
+      push(state, data)
+    end)
+  end
+
+  defp push(state, output = %Output{}) do
+    data = <<255, 250, 201>>
+    data = data <> output.message <> " "
+    data = data <> Jason.encode!(output.data)
+    data = data <> <<255, 240>>
+
+    state.transport.send(state.socket, data)
+  end
+
+  defp push(state, data) when is_binary(data) do
+    state.transport.send(state.socket, data)
   end
 
   defp process_data(state, data) do

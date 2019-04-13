@@ -35,13 +35,15 @@ defmodule Spigot.Telnet.OptionsTest do
     end
 
     test "parses data down to the last seen option" do
-      {opts, "Text in the stream", <<255, 251>>} = Options.parse("Text in the stream" <> <<255, 251, 70, 255, 251>>)
+      {opts, "Text in the stream", <<255, 251>>} =
+        Options.parse("Text in the stream" <> <<255, 251, 70, 255, 251>>)
 
       assert opts == [will: :mssp]
     end
 
     test "splits the text to last processed parts of data" do
-      {_opts, "string", <<255, 250, 70, 1>> <> "name"} = Options.parse("string" <> <<255, 251, 70, 255, 250, 70, 1>> <> "name")
+      {_opts, "string", <<255, 250, 70, 1>> <> "name"} =
+        Options.parse("string" <> <<255, 251, 70, 255, 250, 70, 1>> <> "name")
     end
 
     test "handles midstream sub negotiation" do

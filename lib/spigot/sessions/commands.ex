@@ -23,7 +23,7 @@ defmodule Spigot.Sessions.Commands do
     state = %{
       foreman: opts[:foreman],
       vitals: %{
-        health_points: 50,
+        health_points: 40,
         max_health_points: 55
       }
     }
@@ -74,8 +74,20 @@ defmodule Spigot.Sessions.Commands do
   end
 end
 
+defmodule Spigot.Command do
+  @moduledoc """
+  Behaviour for commands
+  """
+
+  @callback command() :: String.t()
+
+  @callback call(map(), list()) :: {:noreply, map()}
+end
+
 defmodule Spigot.Sessions.Commands.Help do
   @moduledoc "View help"
+
+  @behaviour Spigot.Command
 
   alias Spigot.Messages
 
@@ -91,6 +103,8 @@ end
 defmodule Spigot.Sessions.Commands.Quit do
   @moduledoc "Terminate your session"
 
+  @behaviour Spigot.Command
+
   alias Spigot.Messages
 
   def command(), do: "quit"
@@ -104,6 +118,8 @@ end
 
 defmodule Spigot.Sessions.Commands.Say do
   @moduledoc "Say a message"
+
+  @behaviour Spigot.Command
 
   alias Spigot.Messages
 
@@ -120,14 +136,39 @@ end
 defmodule Spigot.Sessions.Commands.Vitals do
   @moduledoc "Terminate your session"
 
+  @behaviour Spigot.Command
+
   alias Spigot.Messages
+
+  @delay 1000
 
   def command(), do: "vitals"
 
+  def call(state, [count]) do
+    count = String.to_integer(count)
+
+    Enum.each(1..count, fn i ->
+      Process.send_after(self(), {:recv, "vitals"}, @delay * i)
+    end)
+
+    {:noreply, state}
+  end
+
   def call(state, _args) do
+    state = adjust_vitals(state)
+
     send(state.foreman, {:send, "Sending vitals...\n"})
     send(state.foreman, {:send, Messages.Prompt.call(state)})
     send(state.foreman, {:send, Messages.Character.Vitals.call(state)})
+
     {:noreply, state}
+  end
+
+  def adjust_vitals(state) do
+    change = :rand.uniform(20) - 10
+    health_points = state.vitals.health_points + change
+    health_points = Enum.min([health_points, state.vitals.max_health_points])
+    vitals = Map.put(state.vitals, :health_points, health_points)
+    Map.put(state, :vitals, vitals)
   end
 end

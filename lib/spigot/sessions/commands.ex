@@ -16,6 +16,7 @@ defmodule Spigot.Sessions.Commands do
   def init(opts) do
     state = %{
       foreman: opts[:foreman],
+      character: opts[:character],
       vitals: %{
         health_points: 40,
         max_health_points: 55
@@ -49,6 +50,39 @@ defmodule Spigot.Sessions.Commands do
       result ->
         result
     end
+  end
+end
+
+defmodule Spigot.Sessions.Commands.Combat do
+  @moduledoc "Fake combat"
+
+  use Spigot, :command
+
+  alias Spigot.Sessions.Commands.Vitals
+
+  def start(state, _) do
+    push(state, render("start", state))
+    push(state, render(Commands, "prompt", state))
+    send(state.character, {:combat, :start})
+
+    {:noreply, state}
+  end
+
+  def stop(state, _) do
+    push(state, render("stop", state))
+    push(state, render(Commands, "prompt", state))
+    send(state.character, {:combat, :stop})
+
+    {:noreply, state}
+  end
+
+  def tick(state, _) do
+    state = Vitals.adjust_vitals(state)
+
+    push(state, render("tick", state))
+    push(state, render(Commands, "prompt", state))
+
+    {:noreply, state}
   end
 end
 

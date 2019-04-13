@@ -24,6 +24,34 @@ defmodule Spigot.Sessions.Views.Commands do
   end
 end
 
+defmodule Spigot.Sessions.Views.Combat do
+  @moduledoc false
+
+  use Spigot.Sessions.Views
+
+  alias Spigot.Sessions.Views.Vitals
+
+  def render("start", _assigns) do
+    "Starting combat\n"
+  end
+
+  def render("stop", _assigns) do
+    "Stopping combat\n"
+  end
+
+  def render("tick", assigns) do
+    combat_text = """
+    You attack the #{IO.ANSI.yellow()}enemy#{IO.ANSI.reset()}.
+    The #{IO.ANSI.yellow()}enemy#{IO.ANSI.reset()} attacks you.
+    """
+
+    [
+      combat_text,
+      Vitals.render("vitals", assigns)
+    ]
+  end
+end
+
 defmodule Spigot.Sessions.Views.Help do
   @moduledoc false
 

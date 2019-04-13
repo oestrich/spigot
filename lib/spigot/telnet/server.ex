@@ -79,6 +79,7 @@ defmodule Spigot.Telnet.Server do
 
   defp push(state, data) when is_binary(data) do
     state.transport.send(state.socket, data)
+    state.transport.send(state.socket, <<255, 249>>)
   end
 
   defp process_data(state, data) do

@@ -20,8 +20,9 @@ defmodule Spigot.Sessions.Foreman do
   end
 
   def handle_continue(:init, state) do
-    {:ok, state} = Session.start_options(state)
+    {:ok, state} = Session.start_character(state)
     {:ok, state} = Session.start_commands(state)
+    {:ok, state} = Session.start_options(state)
     {:noreply, state, {:continue, :login}}
   end
 

@@ -7,6 +7,7 @@ defmodule Spigot.Sessions.Session do
 
   use Supervisor
 
+  alias Spigot.Sessions.Character
   alias Spigot.Sessions.Commands
   alias Spigot.Sessions.Foreman
   alias Spigot.Sessions.Options
@@ -15,8 +16,15 @@ defmodule Spigot.Sessions.Session do
     Supervisor.start_link(__MODULE__, opts)
   end
 
+  def start_character(foreman_state) do
+    {:ok, options} = Supervisor.start_child(foreman_state.session, {Character, [foreman: self()]})
+    foreman_state = Map.put(foreman_state, :character, options)
+    {:ok, foreman_state}
+  end
+
   def start_commands(foreman_state) do
-    {:ok, options} = Supervisor.start_child(foreman_state.session, {Commands, [foreman: self()]})
+    opts = [foreman: self(), character: foreman_state.character]
+    {:ok, options} = Supervisor.start_child(foreman_state.session, {Commands, opts})
     foreman_state = Map.put(foreman_state, :commands, options)
     {:ok, foreman_state}
   end

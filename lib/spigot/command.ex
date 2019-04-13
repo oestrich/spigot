@@ -50,7 +50,7 @@ defmodule Spigot.Command.Router do
   end
 
   defp match_pattern(pattern, text) do
-    pattern = 
+    pattern =
       pattern
       |> String.split(" ")
       |> Enum.map(fn
@@ -64,7 +64,7 @@ defmodule Spigot.Command.Router do
 
     pattern = "^" <> pattern <> "$"
 
-    pattern 
+    pattern
     |> Regex.compile!()
     |> Regex.named_captures(text)
   end

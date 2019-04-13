@@ -2,6 +2,12 @@ defmodule Spigot.Router do
   use Spigot, :router
 
   scope(Spigot.Sessions.Commands) do
+    module(Combat) do
+      command("combat start", :start)
+      command("combat stop", :stop)
+      command("combat tick", :tick)
+    end
+
     module(Help) do
       command("help", :base)
       command("help :topic", :topic)

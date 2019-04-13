@@ -7,14 +7,9 @@ defmodule Spigot.Sessions.Commands do
 
   require Logger
 
-  alias __MODULE__.Help
-  alias __MODULE__.Quit
-  alias __MODULE__.Say
-  alias __MODULE__.Vitals
+  alias Spigot.Router
   alias Spigot.Sessions.Views.Commands
   alias Spigot.Sessions.Views.Login
-
-  @modules [Help, Quit, Say, Vitals]
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)
@@ -47,59 +42,33 @@ defmodule Spigot.Sessions.Commands do
   end
 
   defp process_command(state, text) do
-    [command | text] = String.split(text, " ")
-
-    with {:ok, module} <- find_module(command) do
-      module.call(state, text)
-    else
-      {:error, :unknown} ->
-        send(state.foreman, {:send, Commands.render("unknown", state)})
-        send(state.foreman, {:send, Commands.render("prompt", state)})
-        {:noreply, state}
-    end
-  end
-
-  defp find_module(command) do
-    module =
-      Enum.find(@modules, fn module ->
-        module.command() == command
-      end)
-
-    case module != nil do
-      true ->
-        {:ok, module}
-
-      false ->
-        {:error, :unknown}
-    end
+    Router.call(state, text)
   end
 end
 
 defmodule Spigot.Sessions.Commands.Help do
   @moduledoc "View help"
 
-  use Spigot.Command
+  use Spigot, :command
 
-  alias Spigot.Sessions.Views.Commands
-
-  def command(), do: "help"
-
-  def call(state, _args) do
+  def base(state, _) do
     push(state, render("base", state))
     push(state, render(Commands, "prompt", state))
 
     {:noreply, state}
+  end
+
+  def topic(state, _topic) do
+    base(state, [])
   end
 end
 
 defmodule Spigot.Sessions.Commands.Quit do
   @moduledoc "Terminate your session"
 
-  use Spigot.Command
+  use Spigot, :command
 
-  def command(), do: "quit"
-
-  def call(state, _args) do
+  def base(state, _) do
     push(state, render("goodbye", state))
     send(state.foreman, :stop)
 
@@ -110,15 +79,9 @@ end
 defmodule Spigot.Sessions.Commands.Say do
   @moduledoc "Say a message"
 
-  use Spigot.Command
+  use Spigot, :command
 
-  alias Spigot.Sessions.Views.Commands
-
-  def command(), do: "say"
-
-  def call(state, text) do
-    text = Enum.join(text, " ")
-
+  def base(state, %{"message" => text}) do
     push(state, render("text", %{text: text}))
     push(state, render(Commands, "prompt", state))
 
@@ -129,30 +92,26 @@ end
 defmodule Spigot.Sessions.Commands.Vitals do
   @moduledoc "Terminate your session"
 
-  use Spigot.Command
-
-  alias Spigot.Sessions.Views.Commands
+  use Spigot, :command
 
   @delay 1000
 
-  def command(), do: "vitals"
-
-  def call(state, [count]) do
-    count = String.to_integer(count)
-
-    Enum.each(1..count, fn i ->
-      Process.send_after(self(), {:recv, "vitals"}, @delay * i)
-    end)
-
-    {:noreply, state}
-  end
-
-  def call(state, _args) do
+  def base(state, _) do
     state = adjust_vitals(state)
 
     push(state, "Sending vitals...\n")
     push(state, render("vitals", state))
     push(state, render(Commands, "prompt", state))
+
+    {:noreply, state}
+  end
+
+  def count(state, %{"count" => count}) do
+    count = String.to_integer(count)
+
+    Enum.each(1..count, fn i ->
+      Process.send_after(self(), {:recv, "vitals"}, @delay * i)
+    end)
 
     {:noreply, state}
   end

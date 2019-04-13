@@ -91,6 +91,8 @@ defmodule Spigot.Sessions.Commands.Vitals do
   alias Spigot.Messages
 
   def call(state, _args) do
+    send(state.foreman, {:send, "Sending vitals...\n"})
+    send(state.foreman, {:send, Messages.Prompt.call(state)})
     send(state.foreman, {:send, Messages.Character.Vitals.call(state)})
     {:noreply, state}
   end

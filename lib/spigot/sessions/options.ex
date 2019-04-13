@@ -7,6 +7,8 @@ defmodule Spigot.Sessions.Options do
 
   require Logger
 
+  alias __MODULE__.OAuth
+
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)
   end
@@ -14,6 +16,7 @@ defmodule Spigot.Sessions.Options do
   def init(opts) do
     state = %{
       foreman: opts[:foreman],
+      oauth: false,
       gmcp: false
     }
 
@@ -48,6 +51,20 @@ defmodule Spigot.Sessions.Options do
     {:noreply, state}
   end
 
+  defp process_option(state, {:dont, byte}) do
+    Logger.debug(fn ->
+      "DONT #{byte}"
+    end)
+
+    {:noreply, state}
+  end
+
+  defp process_option(state, {:will, :oauth}) do
+    Logger.info("Starting OAuth")
+    state = Map.put(state, :oauth, true)
+    {:noreply, state}
+  end
+
   defp process_option(state, {:will, byte}) do
     Logger.debug(fn ->
       "Trying to WILL #{byte}"
@@ -56,5 +73,40 @@ defmodule Spigot.Sessions.Options do
     {:noreply, state}
   end
 
+  defp process_option(state, {:wont, byte}) do
+    Logger.debug(fn ->
+      "WONT #{byte}"
+    end)
+
+    {:noreply, state}
+  end
+
+  defp process_option(state, {:oauth, "Start", params}) do
+    Logger.debug(fn ->
+      "OAuth Start: #{inspect params}"
+    end)
+
+    OAuth.authorization_request(state, params)
+
+    {:noreply, state}
+  end
+
   defp process_option(state, _option), do: {:noreply, state}
+end
+
+defmodule Spigot.Sessions.Options.OAuth do
+  import Spigot.Command.Functions
+
+  def authorization_request(state, %{"host" => "grapevine.haus"}) do
+    params = %{
+      response_type: "code",
+      client_id: "cb61f1cd-a8b8-445e-91b7-282bccbff890",
+      scope: "profile email",
+      state: UUID.uuid4()
+    }
+
+    push(state, <<255, 250, 165>> <> "AuthorizationRequest" <> Jason.encode!(params) <> <<255, 240>>)
+  end
+
+  def authorization_request(_, _), do: :ok
 end

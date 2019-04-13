@@ -58,7 +58,10 @@ defmodule Spigot.Telnet.Server do
   end
 
   def handle_continue(:initial_iacs, state) do
+    # WILL GMCP
     state.transport.send(state.socket, <<255, 251, 201>>)
+    # DO OAuth
+    state.transport.send(state.socket, <<255, 253, 165>>)
     {:noreply, state}
   end
 

@@ -58,7 +58,7 @@ defmodule Spigot.Telnet.OptionsTest do
 
       {opts, <<>>, <<255>>} = Options.parse(options)
 
-      assert opts == []
+      assert opts == [mssp: %{"name" => "grapevine"}]
     end
 
     test "sub negotiation options" do

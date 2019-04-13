@@ -4,6 +4,7 @@ defmodule Spigot.Telnet.Options do
   """
 
   alias Spigot.Telnet.GMCP
+  alias Spigot.Telnet.MSSP
   alias Spigot.Telnet.OAuth
 
   @se 240
@@ -27,6 +28,22 @@ defmodule Spigot.Telnet.Options do
   @charset_request 1
   @term_type_send 1
 
+  def mssp_data?(options) do
+    Enum.any?(options, fn option ->
+      match?({:mssp, _}, option)
+    end)
+  end
+
+  def text_mssp?(string) do
+    string =~ "MSSP-REPLY-START"
+  end
+
+  def get_mssp_data(options) do
+    Enum.find(options, fn option ->
+      match?({:mssp, _}, option)
+    end)
+  end
+
   @doc """
   Parse binary data from a MUD into any telnet options found and known
   """
@@ -41,7 +58,7 @@ defmodule Spigot.Telnet.Options do
     string =
       options
       |> Enum.filter(&is_string?/1)
-      |> Enum.map(&elem(&1, 1))
+      |> Enum.map(&(elem(&1, 1)))
       |> Enum.join()
 
     options =
@@ -142,6 +159,9 @@ defmodule Spigot.Telnet.Options do
       iex> Options.transform(<<255, 253, 34>>)
       {:do, :line_mode}
 
+      iex> Options.transform(<<255, 253, 201>>)
+      {:do, :gmcp}
+
       iex> Options.transform(<<255, 251, 42>>)
       {:will, :charset}
 
@@ -230,6 +250,16 @@ defmodule Spigot.Telnet.Options do
 
   def transform(<<@iac, @wont, byte>>), do: {:wont, byte}
 
+  def transform(<<@iac, @sb, @mssp, data::binary>>) do
+    case MSSP.parse(<<@iac, @sb, @mssp, data::binary>>) do
+      :error ->
+        :unknown
+
+      {:ok, data} ->
+        {:mssp, data}
+    end
+  end
+
   def transform(<<@iac, @sb, @term_type, @term_type_send, @iac, @se>>) do
     {:send, :term_type}
   end
@@ -239,20 +269,20 @@ defmodule Spigot.Telnet.Options do
     {:charset, :request, <<sep>>, data}
   end
 
-  def transform(<<@iac, @sb, @gmcp, data::binary>>) do
-    case GMCP.parse(data) do
+  def transform(<<@iac, @sb, @oauth, data::binary>>) do
+    case OAuth.parse(data) do
       {:ok, module, data} ->
-        {:gmcp, module, data}
+        {:oauth, module, data}
 
       :error ->
         :unknown
     end
   end
 
-  def transform(<<@iac, @sb, @oauth, data::binary>>) do
-    case OAuth.parse(data) do
+  def transform(<<@iac, @sb, @gmcp, data::binary>>) do
+    case GMCP.parse(data) do
       {:ok, module, data} ->
-        {:oauth, module, data}
+        {:gmcp, module, data}
 
       :error ->
         :unknown

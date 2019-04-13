@@ -11,7 +11,8 @@ defmodule Spigot.Sessions.Commands do
   alias __MODULE__.Quit
   alias __MODULE__.Say
   alias __MODULE__.Vitals
-  alias Spigot.Messages
+  alias Spigot.Sessions.Views.Commands
+  alias Spigot.Sessions.Views.Login
 
   @modules [Help, Quit, Say, Vitals]
 
@@ -32,8 +33,8 @@ defmodule Spigot.Sessions.Commands do
   end
 
   def handle_info(:welcome, state) do
-    send(state.foreman, {:send, Messages.Welcome.call(state)})
-    send(state.foreman, {:send, Messages.Prompt.call(state)})
+    send(state.foreman, {:send, Login.render("welcome", state)})
+    send(state.foreman, {:send, Commands.render("prompt", state)})
     {:noreply, state}
   end
 
@@ -52,8 +53,8 @@ defmodule Spigot.Sessions.Commands do
       module.call(state, text)
     else
       {:error, :unknown} ->
-        send(state.foreman, {:send, Messages.Unknown.call(state)})
-        send(state.foreman, {:send, Messages.Prompt.call(state)})
+        send(state.foreman, {:send, Commands.render("unknown", state)})
+        send(state.foreman, {:send, Commands.render("prompt", state)})
         {:noreply, state}
     end
   end
@@ -74,28 +75,19 @@ defmodule Spigot.Sessions.Commands do
   end
 end
 
-defmodule Spigot.Command do
-  @moduledoc """
-  Behaviour for commands
-  """
-
-  @callback command() :: String.t()
-
-  @callback call(map(), list()) :: {:noreply, map()}
-end
-
 defmodule Spigot.Sessions.Commands.Help do
   @moduledoc "View help"
 
-  @behaviour Spigot.Command
+  use Spigot.Command
 
-  alias Spigot.Messages
+  alias Spigot.Sessions.Views.Commands
 
   def command(), do: "help"
 
   def call(state, _args) do
-    send(state.foreman, {:send, Messages.Help.Base.call(state)})
-    send(state.foreman, {:send, Messages.Prompt.call(state)})
+    push(state, render("base", state))
+    push(state, render(Commands, "prompt", state))
+
     {:noreply, state}
   end
 end
@@ -103,15 +95,14 @@ end
 defmodule Spigot.Sessions.Commands.Quit do
   @moduledoc "Terminate your session"
 
-  @behaviour Spigot.Command
-
-  alias Spigot.Messages
+  use Spigot.Command
 
   def command(), do: "quit"
 
   def call(state, _args) do
-    send(state.foreman, {:send, Messages.Goodbye.call(state)})
+    push(state, render("goodbye", state))
     send(state.foreman, :stop)
+
     {:noreply, state}
   end
 end
@@ -119,16 +110,18 @@ end
 defmodule Spigot.Sessions.Commands.Say do
   @moduledoc "Say a message"
 
-  @behaviour Spigot.Command
+  use Spigot.Command
 
-  alias Spigot.Messages
+  alias Spigot.Sessions.Views.Commands
 
   def command(), do: "say"
 
   def call(state, text) do
     text = Enum.join(text, " ")
-    send(state.foreman, {:send, Messages.Say.call(state, [text])})
-    send(state.foreman, {:send, Messages.Prompt.call(state)})
+
+    push(state, render("text", %{text: text}))
+    push(state, render(Commands, "prompt", state))
+
     {:noreply, state}
   end
 end
@@ -136,9 +129,9 @@ end
 defmodule Spigot.Sessions.Commands.Vitals do
   @moduledoc "Terminate your session"
 
-  @behaviour Spigot.Command
+  use Spigot.Command
 
-  alias Spigot.Messages
+  alias Spigot.Sessions.Views.Commands
 
   @delay 1000
 
@@ -157,9 +150,9 @@ defmodule Spigot.Sessions.Commands.Vitals do
   def call(state, _args) do
     state = adjust_vitals(state)
 
-    send(state.foreman, {:send, "Sending vitals...\n"})
-    send(state.foreman, {:send, Messages.Prompt.call(state)})
-    send(state.foreman, {:send, Messages.Character.Vitals.call(state)})
+    push(state, "Sending vitals...\n")
+    push(state, render("vitals", state))
+    push(state, render(Commands, "prompt", state))
 
     {:noreply, state}
   end

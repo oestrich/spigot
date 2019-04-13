@@ -3,8 +3,8 @@ defmodule Spigot.Telnet.Server do
   ranch protocol for handling telnet connection
   """
 
+  alias Spigot.Output.Event
   alias Spigot.Sessions
-  alias Spigot.Sessions.Views.Output
   alias Spigot.Telnet.Options
 
   @behaviour :ranch_protocol
@@ -68,9 +68,9 @@ defmodule Spigot.Telnet.Server do
     end)
   end
 
-  defp push(state, output = %Output{}) do
+  defp push(state, output = %Event{}) do
     data = <<255, 250, 201>>
-    data = data <> output.message <> " "
+    data = data <> output.topic <> " "
     data = data <> Jason.encode!(output.data)
     data = data <> <<255, 240>>
 

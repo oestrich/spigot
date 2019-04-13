@@ -14,7 +14,7 @@ defmodule Spigot.Sessions.Options do
   def init(opts) do
     state = %{
       foreman: opts[:foreman],
-      gmcp: false,
+      gmcp: false
     }
 
     {:ok, state}

@@ -31,9 +31,9 @@ defmodule Spigot.Sessions.Session do
     DynamicSupervisor.terminate_child(Spigot.Sessions, foreman_state.session)
   end
 
-  def init([protocol: protocol]) do
+  def init(protocol: protocol) do
     children = [
-      {Foreman, [session: self(), protocol: protocol]},
+      {Foreman, [session: self(), protocol: protocol]}
     ]
 
     Supervisor.init(children, strategy: :one_for_all)

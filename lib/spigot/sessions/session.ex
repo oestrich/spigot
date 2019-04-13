@@ -27,6 +27,10 @@ defmodule Spigot.Sessions.Session do
     {:ok, foreman_state}
   end
 
+  def terminate(foreman_state) do
+    DynamicSupervisor.terminate_child(Spigot.Sessions, foreman_state.session)
+  end
+
   def init([protocol: protocol]) do
     children = [
       {Foreman, [session: self(), protocol: protocol]},

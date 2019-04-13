@@ -44,4 +44,9 @@ defmodule Spigot.Sessions.Foreman do
     send(state.protocol, {:send, data})
     {:noreply, state}
   end
+
+  def handle_info(:terminate, state) do
+    Session.terminate(state)
+    {:noreply, state}
+  end
 end

@@ -25,7 +25,8 @@ defmodule Spigot.MixProject do
       {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
       {:elixir_uuid, "~> 1.2"},
       {:jason, "~> 1.1"},
-      {:ranch, "~> 1.7"}
+      {:ranch, "~> 1.7"},
+      {:telnet, git: "https://github.com/oestrich/telnet-elixir.git"}
     ]
   end
 end

@@ -5,7 +5,7 @@ defmodule Spigot.Telnet.Server do
 
   alias Spigot.Output.Event
   alias Spigot.Sessions
-  alias Spigot.Telnet.Options
+  alias Telnet.Options
 
   @behaviour :ranch_protocol
 

@@ -14,6 +14,22 @@ defmodule Spigot.Messages.Goodbye do
   def call(_state, _args \\ []), do: "Goodbye!\n"
 end
 
+defmodule Spigot.Messages.Help.Base do
+  @moduledoc false
+
+  @behaviour Spigot.Messages
+
+  def call(_state, _args \\ []) do
+    """
+    Commands available:
+
+    - quit
+    - say
+    - vitals
+    """
+  end
+end
+
 defmodule Spigot.Messages.Prompt do
   @moduledoc false
 

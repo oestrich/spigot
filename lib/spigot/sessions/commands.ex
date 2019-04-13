@@ -7,10 +7,13 @@ defmodule Spigot.Sessions.Commands do
 
   require Logger
 
+  alias __MODULE__.Help
   alias __MODULE__.Quit
   alias __MODULE__.Say
   alias __MODULE__.Vitals
   alias Spigot.Messages
+
+  @modules [Help, Quit, Say, Vitals]
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)
@@ -42,20 +45,44 @@ defmodule Spigot.Sessions.Commands do
     {:noreply, state}
   end
 
-  defp process_command(state, "quit") do
-    Quit.call(state, [])
+  defp process_command(state, text) do
+    [command | text] = String.split(text, " ")
+
+    with {:ok, module} <- find_module(command) do
+      module.call(state, text)
+    else
+      {:error, :unknown} ->
+        send(state.foreman, {:send, Messages.Unknown.call(state)})
+        send(state.foreman, {:send, Messages.Prompt.call(state)})
+        {:noreply, state}
+    end
   end
 
-  defp process_command(state, "say " <> text) do
-    Say.call(state, [text])
-  end
+  defp find_module(command) do
+    module =
+      Enum.find(@modules, fn module ->
+        module.command() == command
+      end)
 
-  defp process_command(state, "vitals") do
-    Vitals.call(state, [])
-  end
+    case module != nil do
+      true ->
+        {:ok, module}
 
-  defp process_command(state, _text) do
-    send(state.foreman, {:send, Messages.Unknown.call(state)})
+      false ->
+        {:error, :unknown}
+    end
+  end
+end
+
+defmodule Spigot.Sessions.Commands.Help do
+  @moduledoc "View help"
+
+  alias Spigot.Messages
+
+  def command(), do: "help"
+
+  def call(state, _args) do
+    send(state.foreman, {:send, Messages.Help.Base.call(state)})
     send(state.foreman, {:send, Messages.Prompt.call(state)})
     {:noreply, state}
   end
@@ -65,6 +92,8 @@ defmodule Spigot.Sessions.Commands.Quit do
   @moduledoc "Terminate your session"
 
   alias Spigot.Messages
+
+  def command(), do: "quit"
 
   def call(state, _args) do
     send(state.foreman, {:send, Messages.Goodbye.call(state)})
@@ -78,7 +107,10 @@ defmodule Spigot.Sessions.Commands.Say do
 
   alias Spigot.Messages
 
-  def call(state, [text]) do
+  def command(), do: "say"
+
+  def call(state, text) do
+    text = Enum.join(text, " ")
     send(state.foreman, {:send, Messages.Say.call(state, [text])})
     send(state.foreman, {:send, Messages.Prompt.call(state)})
     {:noreply, state}
@@ -89,6 +121,8 @@ defmodule Spigot.Sessions.Commands.Vitals do
   @moduledoc "Terminate your session"
 
   alias Spigot.Messages
+
+  def command(), do: "vitals"
 
   def call(state, _args) do
     send(state.foreman, {:send, "Sending vitals...\n"})

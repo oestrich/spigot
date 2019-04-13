@@ -43,6 +43,10 @@ defmodule Spigot.Telnet.Server do
   end
 
   def handle_info({:tcp_closed, _socket}, state) do
+    handle_info(:terminate, state)
+  end
+
+  def handle_info(:terminate, state) do
     send(state.foreman, :terminate)
     {:stop, :normal, state}
   end

@@ -23,6 +23,7 @@ defmodule Spigot.MixProject do
   defp deps do
     [
       {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:jason, "~> 1.1"},
       {:ranch, "~> 1.7"}
     ]
   end

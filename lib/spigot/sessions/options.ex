@@ -95,7 +95,7 @@ defmodule Spigot.Sessions.Options do
 end
 
 defmodule Spigot.Sessions.Options.OAuth do
-  import Spigot.Command.Functions
+  import Spigot.Action
 
   def authorization_request(state, %{"host" => "grapevine.haus"}) do
     params = %{

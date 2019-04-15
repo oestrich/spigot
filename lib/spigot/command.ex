@@ -16,12 +16,12 @@ defmodule Spigot.Command.Functions do
   Push and render output
   """
 
-  def push(state, lines) do
-    send(state.foreman, {:send, lines})
+  def push(conn, lines) do
+    Map.put(conn, :lines, conn.lines ++ List.wrap(lines))
   end
 
-  def render(view, template, assigns) do
-    view.render(template, assigns)
+  def render(conn, view, template, assigns) do
+    push(conn, view.render(template, assigns))
   end
 end
 
@@ -87,11 +87,11 @@ defmodule Spigot.Command.Router.Macro do
 
       unquote(parse_modules(module, opts[:do]))
 
-      def call(state, command_text, output) do
+      def call(conn, command_text) do
         case parse(command_text) do
           {:ok, {pattern, params}} ->
-            output = Map.put(output, :params, params)
-            receive(pattern, state, output)
+            conn = Map.put(conn, :params, params)
+            receive(pattern, conn)
 
           {:error, :unknown} ->
             {:error, :unknown}
@@ -137,8 +137,8 @@ defmodule Spigot.Command.Router.Macro do
     quote do
       @patterns unquote(pattern)
 
-      def receive(unquote(pattern), state, output) do
-        unquote(module).unquote(fun)(state, output, output.params)
+      def receive(unquote(pattern), conn) do
+        unquote(module).unquote(fun)(conn, conn.params)
       end
     end
   end

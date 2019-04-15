@@ -7,6 +7,12 @@ defmodule Spigot do
     apply(__MODULE__, which, [])
   end
 
+  def action() do
+    quote do
+      import Spigot.Action
+    end
+  end
+
   def command() do
     quote do
       @view Spigot.Command.view_module(__MODULE__)
@@ -15,8 +21,8 @@ defmodule Spigot do
 
       alias Spigot.View.Commands
 
-      def render(template, assigns) do
-        render(@view, template, assigns)
+      def render(conn, template, assigns) do
+        render(conn, @view, template, assigns)
       end
     end
   end

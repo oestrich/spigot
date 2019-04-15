@@ -1,5 +1,5 @@
 defmodule Spigot.Conn do
-  defstruct [:foreman, :params, :assigns, :lines, :events]
+  defstruct [:foreman, :character, :params, :assigns, lines: []]
 end
 
 defmodule Spigot.Conn.Event do

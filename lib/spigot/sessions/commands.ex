@@ -41,17 +41,19 @@ defmodule Spigot.Sessions.Commands do
   defp process_command(state, command_text) do
     conn = %Spigot.Conn{
       foreman: state.foreman,
+      character: state.character,
       assigns: %{}
     }
 
-    case Router.call(state, command_text, conn) do
+    case Router.call(conn, command_text) do
       {:error, :unknown} ->
-        send(state.foreman, {:send, Commands.render("unknown", state)})
-        send(state.foreman, {:send, Commands.render("prompt", state)})
+        send(state.foreman, {:send, Commands.render("unknown", %{})})
+        send(state.foreman, {:send, Commands.render("prompt", %{})})
         {:noreply, state}
 
       result ->
-        result
+        send(state.foreman, {:send, result.lines})
+        {:noreply, state}
     end
   end
 end
@@ -61,28 +63,28 @@ defmodule Spigot.Sessions.Commands.Combat do
 
   use Spigot, :command
 
-  def start(state, _out, _params) do
-    push(state, render("start", state))
-    push(state, render(Commands, "prompt", state))
-    send(state.character, {:combat, :start})
+  def start(conn, _params) do
+    send(conn.character, {:combat, :start})
 
-    {:noreply, state}
+    conn
+    |> render("start", %{})
+    |> render(Commands, "prompt", %{})
   end
 
-  def stop(state, _out, _params) do
-    push(state, render("stop", state))
-    push(state, render(Commands, "prompt", state))
-    send(state.character, {:combat, :stop})
+  def stop(conn, _params) do
+    send(conn.character, {:combat, :stop})
 
-    {:noreply, state}
+    conn
+    |> render("stop", %{})
+    |> render(Commands, "prompt", %{})
   end
 
-  def tick(state, _out, _params) do
-    push(state, render("tick", state))
-    push(state, render(Commands, "prompt", state))
-    send(state.character, {:send, :vitals})
+  def tick(conn, _params) do
+    send(conn.character, {:send, :vitals})
 
-    {:noreply, state}
+    conn
+    |> render("tick", %{})
+    |> render(Commands, "prompt", %{})
   end
 end
 
@@ -91,15 +93,14 @@ defmodule Spigot.Sessions.Commands.Help do
 
   use Spigot, :command
 
-  def base(state, _out, _params) do
-    push(state, render("base", state))
-    push(state, render(Commands, "prompt", state))
-
-    {:noreply, state}
+  def base(conn, _params) do
+    conn
+    |> render("base", %{})
+    |> render(Commands, "prompt", %{})
   end
 
-  def topic(state, out, params) do
-    base(state, out, params)
+  def topic(conn, params) do
+    base(conn, params)
   end
 end
 
@@ -108,11 +109,9 @@ defmodule Spigot.Sessions.Commands.Quit do
 
   use Spigot, :command
 
-  def base(state, _out, _params) do
-    push(state, render("goodbye", state))
-    send(state.foreman, :stop)
-
-    {:noreply, state}
+  def base(conn, _params) do
+    send(conn.foreman, :stop)
+    render(conn, "goodbye", %{})
   end
 end
 
@@ -121,11 +120,10 @@ defmodule Spigot.Sessions.Commands.Say do
 
   use Spigot, :command
 
-  def base(state, _out, %{"message" => text}) do
-    push(state, render("text", %{text: text}))
-    push(state, render(Commands, "prompt", state))
-
-    {:noreply, state}
+  def base(conn, %{"message" => text}) do
+    conn
+    |> render("text", %{text: text})
+    |> render(Commands, "prompt", %{})
   end
 end
 
@@ -134,11 +132,11 @@ defmodule Spigot.Sessions.Commands.Vitals do
 
   use Spigot, :command
 
-  def base(state, _out, _params) do
-    push(state, "Sending vitals...\n")
-    send(state.character, {:send, :vitals})
-    push(state, render(Commands, "prompt", state))
+  def base(conn, _params) do
+    send(conn.character, {:send, :vitals})
 
-    {:noreply, state}
+    conn
+    |> push("Sending vitals...\n")
+    |> render(Commands, "prompt", %{})
   end
 end

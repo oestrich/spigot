@@ -9,7 +9,7 @@ defmodule Spigot.Sessions.Character do
 
   require Logger
 
-  import Spigot.Command.Functions
+  import Spigot.Action
 
   alias __MODULE__.Combat
   alias Spigot.View.Vitals
@@ -67,7 +67,7 @@ defmodule Spigot.Sessions.Character.Combat do
   pretending to be in combat with something.
   """
 
-  import Spigot.Command.Functions
+  use Spigot, :action
 
   alias Spigot.View.Combat, as: CombatView
   alias Spigot.View.Vitals

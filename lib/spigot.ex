@@ -13,11 +13,17 @@ defmodule Spigot do
 
       import Spigot.Command.Functions
 
-      alias Spigot.Sessions.Views.Commands
+      alias Spigot.View.Commands
 
       def render(template, assigns) do
         render(@view, template, assigns)
       end
+    end
+  end
+
+  def view() do
+    quote do
+      @moduledoc false
     end
   end
 

@@ -6,8 +6,8 @@ defmodule Spigot.Sessions.Commands do
   use GenServer
 
   alias Spigot.Router
-  alias Spigot.Sessions.Views.Commands
-  alias Spigot.Sessions.Views.Login
+  alias Spigot.View.Commands
+  alias Spigot.View.Login
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)
@@ -38,8 +38,13 @@ defmodule Spigot.Sessions.Commands do
     {:noreply, state}
   end
 
-  defp process_command(state, text) do
-    case Router.call(state, text) do
+  defp process_command(state, command_text) do
+    conn = %Spigot.Conn{
+      foreman: state.foreman,
+      assigns: %{}
+    }
+
+    case Router.call(state, command_text, conn) do
       {:error, :unknown} ->
         send(state.foreman, {:send, Commands.render("unknown", state)})
         send(state.foreman, {:send, Commands.render("prompt", state)})
@@ -56,7 +61,7 @@ defmodule Spigot.Sessions.Commands.Combat do
 
   use Spigot, :command
 
-  def start(state, _) do
+  def start(state, _out, _params) do
     push(state, render("start", state))
     push(state, render(Commands, "prompt", state))
     send(state.character, {:combat, :start})
@@ -64,7 +69,7 @@ defmodule Spigot.Sessions.Commands.Combat do
     {:noreply, state}
   end
 
-  def stop(state, _) do
+  def stop(state, _out, _params) do
     push(state, render("stop", state))
     push(state, render(Commands, "prompt", state))
     send(state.character, {:combat, :stop})
@@ -72,7 +77,7 @@ defmodule Spigot.Sessions.Commands.Combat do
     {:noreply, state}
   end
 
-  def tick(state, _) do
+  def tick(state, _out, _params) do
     push(state, render("tick", state))
     push(state, render(Commands, "prompt", state))
     send(state.character, {:send, :vitals})
@@ -86,15 +91,15 @@ defmodule Spigot.Sessions.Commands.Help do
 
   use Spigot, :command
 
-  def base(state, _) do
+  def base(state, _out, _params) do
     push(state, render("base", state))
     push(state, render(Commands, "prompt", state))
 
     {:noreply, state}
   end
 
-  def topic(state, _topic) do
-    base(state, [])
+  def topic(state, out, params) do
+    base(state, out, params)
   end
 end
 
@@ -103,7 +108,7 @@ defmodule Spigot.Sessions.Commands.Quit do
 
   use Spigot, :command
 
-  def base(state, _) do
+  def base(state, _out, _params) do
     push(state, render("goodbye", state))
     send(state.foreman, :stop)
 
@@ -116,7 +121,7 @@ defmodule Spigot.Sessions.Commands.Say do
 
   use Spigot, :command
 
-  def base(state, %{"message" => text}) do
+  def base(state, _out, %{"message" => text}) do
     push(state, render("text", %{text: text}))
     push(state, render(Commands, "prompt", state))
 
@@ -129,7 +134,7 @@ defmodule Spigot.Sessions.Commands.Vitals do
 
   use Spigot, :command
 
-  def base(state, _) do
+  def base(state, _out, _params) do
     push(state, "Sending vitals...\n")
     send(state.character, {:send, :vitals})
     push(state, render(Commands, "prompt", state))

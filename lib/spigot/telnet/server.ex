@@ -3,7 +3,7 @@ defmodule Spigot.Telnet.Server do
   ranch protocol for handling telnet connection
   """
 
-  alias Spigot.Output.Event
+  alias Spigot.Conn.Event
   alias Spigot.Sessions
   alias Telnet.Options
 

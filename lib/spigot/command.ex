@@ -5,7 +5,7 @@ defmodule Spigot.Command do
 
   def view_module(module) do
     base_module = List.last(String.split(to_string(module), "."))
-    String.to_atom(Enum.join(["Elixir", "Spigot", "Sessions", "Views", base_module], "."))
+    String.to_atom(Enum.join(["Elixir", "Spigot", "View", base_module], "."))
   end
 end
 
@@ -16,8 +16,8 @@ defmodule Spigot.Command.Functions do
   Push and render output
   """
 
-  def push(state, output) do
-    send(state.foreman, {:send, output})
+  def push(state, lines) do
+    send(state.foreman, {:send, lines})
   end
 
   def render(view, template, assigns) do
@@ -87,10 +87,11 @@ defmodule Spigot.Command.Router.Macro do
 
       unquote(parse_modules(module, opts[:do]))
 
-      def call(state, text) do
-        case parse(text) do
-          {:ok, {pattern, assigns}} ->
-            receive(pattern, state, assigns)
+      def call(state, command_text, output) do
+        case parse(command_text) do
+          {:ok, {pattern, params}} ->
+            output = Map.put(output, :params, params)
+            receive(pattern, state, output)
 
           {:error, :unknown} ->
             {:error, :unknown}
@@ -136,8 +137,8 @@ defmodule Spigot.Command.Router.Macro do
     quote do
       @patterns unquote(pattern)
 
-      def receive(unquote(pattern), state, command) do
-        unquote(module).unquote(fun)(state, command)
+      def receive(unquote(pattern), state, output) do
+        unquote(module).unquote(fun)(state, output, output.params)
       end
     end
   end

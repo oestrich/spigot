@@ -1,19 +1,13 @@
-defmodule Spigot.Sessions.Views do
+defmodule Spigot.View do
   @moduledoc """
   Render output from the game
   """
-
-  defmacro __using__(_opts) do
-    quote do
-      @moduledoc false
-    end
-  end
 end
 
-defmodule Spigot.Sessions.Views.Commands do
+defmodule Spigot.View.Commands do
   @moduledoc false
 
-  use Spigot.Sessions.Views
+  use Spigot, :view
 
   def render("prompt", _assigns) do
     "> "
@@ -24,10 +18,10 @@ defmodule Spigot.Sessions.Views.Commands do
   end
 end
 
-defmodule Spigot.Sessions.Views.Combat do
+defmodule Spigot.View.Combat do
   @moduledoc false
 
-  use Spigot.Sessions.Views
+  use Spigot, :view
 
   def render("start", _assigns) do
     "Starting combat\n"
@@ -45,10 +39,10 @@ defmodule Spigot.Sessions.Views.Combat do
   end
 end
 
-defmodule Spigot.Sessions.Views.Help do
+defmodule Spigot.View.Help do
   @moduledoc false
 
-  use Spigot.Sessions.Views
+  use Spigot, :view
 
   def render("base", _assigns) do
     """
@@ -61,42 +55,42 @@ defmodule Spigot.Sessions.Views.Help do
   end
 end
 
-defmodule Spigot.Sessions.Views.Login do
+defmodule Spigot.View.Login do
   @moduledoc false
 
-  use Spigot.Sessions.Views
+  use Spigot, :view
 
   def render("welcome", _assigns) do
     "Welcome to #{IO.ANSI.cyan()}Spigot.#{IO.ANSI.reset()}\n"
   end
 end
 
-defmodule Spigot.Sessions.Views.Say do
+defmodule Spigot.View.Say do
   @moduledoc false
 
-  use Spigot.Sessions.Views
+  use Spigot, :view
 
   def render("text", %{text: text}) do
     ~s(You say, #{IO.ANSI.green()}"#{text}"\n#{IO.ANSI.reset()})
   end
 end
 
-defmodule Spigot.Sessions.Views.Quit do
+defmodule Spigot.View.Quit do
   @moduledoc false
 
-  use Spigot.Sessions.Views
+  use Spigot, :view
 
   def render("goodbye", _assigns) do
     "Goodbye!\n"
   end
 end
 
-defmodule Spigot.Sessions.Views.Vitals do
+defmodule Spigot.View.Vitals do
   @moduledoc false
 
-  use Spigot.Sessions.Views
+  use Spigot, :view
 
-  alias Spigot.Output.Event
+  alias Spigot.Conn.Event
 
   def render("vitals", %{vitals: vitals}) do
     %Event{

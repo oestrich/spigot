@@ -67,24 +67,24 @@ defmodule Spigot.Sessions.Commands.Combat do
     send(conn.character, {:combat, :start})
 
     conn
-    |> render("start", %{})
-    |> render(Commands, "prompt", %{})
+    |> render("start")
+    |> render(Commands, "prompt")
   end
 
   def stop(conn, _params) do
     send(conn.character, {:combat, :stop})
 
     conn
-    |> render("stop", %{})
-    |> render(Commands, "prompt", %{})
+    |> render("stop")
+    |> render(Commands, "prompt")
   end
 
   def tick(conn, _params) do
     send(conn.character, {:send, :vitals})
 
     conn
-    |> render("tick", %{})
-    |> render(Commands, "prompt", %{})
+    |> render("tick")
+    |> render(Commands, "prompt")
   end
 end
 
@@ -95,8 +95,8 @@ defmodule Spigot.Sessions.Commands.Help do
 
   def base(conn, _params) do
     conn
-    |> render("base", %{})
-    |> render(Commands, "prompt", %{})
+    |> render("base")
+    |> render(Commands, "prompt")
   end
 
   def topic(conn, params) do
@@ -111,7 +111,7 @@ defmodule Spigot.Sessions.Commands.Quit do
 
   def base(conn, _params) do
     send(conn.foreman, :stop)
-    render(conn, "goodbye", %{})
+    render(conn, "goodbye")
   end
 end
 
@@ -123,7 +123,7 @@ defmodule Spigot.Sessions.Commands.Say do
   def base(conn, %{"message" => text}) do
     conn
     |> render("text", %{text: text})
-    |> render(Commands, "prompt", %{})
+    |> render(Commands, "prompt")
   end
 end
 
@@ -137,6 +137,6 @@ defmodule Spigot.Sessions.Commands.Vitals do
 
     conn
     |> push("Sending vitals...\n")
-    |> render(Commands, "prompt", %{})
+    |> render(Commands, "prompt")
   end
 end

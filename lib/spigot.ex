@@ -21,9 +21,7 @@ defmodule Spigot do
 
       alias Spigot.View.Commands
 
-      def render(conn, template, assigns) do
-        render(conn, @view, template, assigns)
-      end
+      def view(), do: @view
     end
   end
 

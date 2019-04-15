@@ -20,8 +20,20 @@ defmodule Spigot.Command.Functions do
     Map.put(conn, :lines, conn.lines ++ List.wrap(lines))
   end
 
+  def render(conn, template) do
+    render(conn, conn.private.view, template, %{})
+  end
+
+  def render(conn, template, assigns) when is_binary(template) and is_map(assigns) do
+    render(conn, conn.private.view, template, assigns)
+  end
+
+  def render(conn, view, template) when is_atom(view) and is_binary(template) do
+    render(conn, view, template, %{})
+  end
+
   def render(conn, view, template, assigns) do
-    push(conn, view.render(template, assigns))
+    push(conn, view.render(template, Map.merge(conn.assigns, assigns)))
   end
 end
 
@@ -138,6 +150,8 @@ defmodule Spigot.Command.Router.Macro do
       @patterns unquote(pattern)
 
       def receive(unquote(pattern), conn) do
+        private = Map.put(conn.private, :view, unquote(module).view())
+        conn = Map.put(conn, :private, private)
         unquote(module).unquote(fun)(conn, conn.params)
       end
     end

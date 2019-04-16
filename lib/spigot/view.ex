@@ -90,8 +90,6 @@ defmodule Spigot.View.Vitals do
 
   use Spigot, :view
 
-  alias Spigot.Conn.Event
-
   def render("vitals", %{vitals: vitals}) do
     %Event{
       topic: "Character.Vitals",

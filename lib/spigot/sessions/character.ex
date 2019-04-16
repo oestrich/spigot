@@ -12,6 +12,7 @@ defmodule Spigot.Sessions.Character do
   import Spigot.Action
 
   alias __MODULE__.Combat
+  alias Spigot.Character
   alias Spigot.View.Vitals
 
   def start_link(opts) do
@@ -22,7 +23,7 @@ defmodule Spigot.Sessions.Character do
     state = %{
       foreman: opts[:foreman],
       combat: false,
-      vitals: %{
+      vitals: %Character.Vitals{
         health_points: 40,
         max_health_points: 55,
         skill_points: 35,

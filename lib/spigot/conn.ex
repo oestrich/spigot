@@ -1,8 +1,14 @@
 defmodule Spigot.Conn.Private do
+  @moduledoc false
+
   defstruct [:view]
 end
 
 defmodule Spigot.Conn do
+  @moduledoc """
+  Struct for tracking data being processed in a command or action
+  """
+
   defstruct [:foreman, :character, :params, :assigns, private: %Spigot.Conn.Private{}, lines: []]
 end
 

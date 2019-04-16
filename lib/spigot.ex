@@ -28,6 +28,8 @@ defmodule Spigot do
   def view() do
     quote do
       @moduledoc false
+
+      alias Spigot.Conn.Event
     end
   end
 

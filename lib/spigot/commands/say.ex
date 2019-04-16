@@ -1,4 +1,4 @@
-defmodule Spigot.Command.Say do
+defmodule Spigot.Commands.Say do
   @moduledoc "Say a message"
 
   use Spigot, :command

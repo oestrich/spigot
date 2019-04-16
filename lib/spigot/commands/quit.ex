@@ -1,4 +1,4 @@
-defmodule Spigot.Command.Quit do
+defmodule Spigot.Commands.Quit do
   @moduledoc "Terminate your session"
 
   use Spigot, :command

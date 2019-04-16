@@ -1,4 +1,4 @@
-defmodule Spigot.Command.Help do
+defmodule Spigot.Commands.Help do
   @moduledoc "View help"
 
   use Spigot, :command

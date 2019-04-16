@@ -1,4 +1,4 @@
-defmodule Spigot.Command.Combat do
+defmodule Spigot.Commands.Combat do
   @moduledoc "Fake combat"
 
   use Spigot, :command

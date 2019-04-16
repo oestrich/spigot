@@ -1,4 +1,4 @@
-defmodule Spigot.Command.Who do
+defmodule Spigot.Commands.Who do
   @moduledoc "View other players in the game"
 
   use Spigot, :command

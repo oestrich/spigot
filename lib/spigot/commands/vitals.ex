@@ -1,4 +1,4 @@
-defmodule Spigot.Command.Vitals do
+defmodule Spigot.Commands.Vitals do
   @moduledoc "Terminate your session"
 
   use Spigot, :command

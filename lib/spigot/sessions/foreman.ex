@@ -15,14 +15,22 @@ defmodule Spigot.Sessions.Foreman do
   end
 
   def init(opts) do
-    state = Enum.into(opts, %{})
+    state = %{
+      session: opts[:session],
+      protocol: opts[:protocol]
+    }
+
     {:ok, state, {:continue, :init}}
   end
 
   def handle_continue(:init, state) do
+    {:ok, state} = Session.start_tether(state)
     {:ok, state} = Session.start_character(state)
     {:ok, state} = Session.start_commands(state)
     {:ok, state} = Session.start_options(state)
+
+    send(state.protocol, {:takeover, self()})
+
     {:noreply, state, {:continue, :login}}
   end
 

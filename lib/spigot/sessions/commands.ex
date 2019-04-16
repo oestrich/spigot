@@ -98,6 +98,16 @@ defmodule Spigot.Sessions.Commands.Combat do
   end
 end
 
+defmodule Spigot.Sessions.Commands.Crash do
+  @moduledoc "Crash the commands process"
+
+  use Spigot, :command
+
+  def base(_conn, _params) do
+    raise "Crashing now"
+  end
+end
+
 defmodule Spigot.Sessions.Commands.Help do
   @moduledoc "View help"
 

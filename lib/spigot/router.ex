@@ -8,6 +8,10 @@ defmodule Spigot.Router do
       command("combat tick", :tick)
     end
 
+    module(Crash) do
+      command("crash", :base)
+    end
+
     module(Help) do
       command("help", :base)
       command("help :topic", :topic)

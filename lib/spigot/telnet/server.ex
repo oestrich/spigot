@@ -39,6 +39,11 @@ defmodule Spigot.Telnet.Server do
     {:noreply, state, {:continue, :initial_iacs}}
   end
 
+  def handle_info({:takeover, foreman}, state) do
+    state = Map.put(state, :foreman, foreman)
+    {:noreply, state}
+  end
+
   def handle_info({:tcp, _socket, data}, state) do
     process_data(state, data)
   end

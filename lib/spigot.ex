@@ -41,7 +41,7 @@ defmodule Spigot do
   def router() do
     quote do
       import Spigot.Command.Router
-      import Spigot.Command.Router.Macro
+      import Spigot.Command.RouterMacro
     end
   end
 end

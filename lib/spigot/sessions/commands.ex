@@ -6,8 +6,8 @@ defmodule Spigot.Sessions.Commands do
   use GenServer
 
   alias Spigot.Router
-  alias Spigot.View.Commands
-  alias Spigot.View.Login
+  alias Spigot.Views.Commands
+  alias Spigot.Views.Login
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)

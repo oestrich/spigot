@@ -13,7 +13,7 @@ defmodule Spigot.Sessions.Character do
 
   alias __MODULE__.Combat
   alias Spigot.Character
-  alias Spigot.View.Vitals
+  alias Spigot.Views.Vitals
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)
@@ -69,8 +69,8 @@ defmodule Spigot.Sessions.Character.Combat do
 
   use Spigot, :action
 
-  alias Spigot.View.Combat
-  alias Spigot.View.Vitals
+  alias Spigot.Views.Combat
+  alias Spigot.Views.Vitals
 
   @delay 1000
 

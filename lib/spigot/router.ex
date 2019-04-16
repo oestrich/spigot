@@ -1,7 +1,7 @@
 defmodule Spigot.Router do
   use Spigot, :router
 
-  scope(Spigot.Sessions.Commands) do
+  scope(Spigot.Command) do
     module(Combat) do
       command("combat start", :start)
       command("combat stop", :stop)

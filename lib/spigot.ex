@@ -13,6 +13,8 @@ defmodule Spigot do
 
       import Spigot.Action
 
+      defstruct [:action, :params]
+
       def view(), do: @view
     end
   end
@@ -42,6 +44,18 @@ defmodule Spigot do
     quote do
       import Spigot.Command.Router
       import Spigot.Command.RouterMacro
+    end
+  end
+
+  def sink() do
+    quote do
+      use GenServer
+
+      import Spigot.Sink
+
+      def start_link(opts) do
+        GenServer.start_link(__MODULE__, opts)
+      end
     end
   end
 end

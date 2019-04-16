@@ -9,6 +9,10 @@ defmodule Spigot.Command do
     Map.put(conn, :messages, conn.messages ++ [{process, message}])
   end
 
+  def event(conn, process, module, action, params \\ %{}) do
+    forward(conn, process, struct(module, %{action: action, params: params}))
+  end
+
   def push(conn, lines) do
     Map.put(conn, :lines, conn.lines ++ List.wrap(lines))
   end

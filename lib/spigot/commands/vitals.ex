@@ -3,10 +3,12 @@ defmodule Spigot.Commands.Vitals do
 
   use Spigot, :command
 
+  alias Spigot.Actions.Combat
+
   def base(conn, _params) do
     conn
     |> push("Sending vitals...\n")
     |> render(Commands, "prompt")
-    |> forward(:character, {:send, :vitals})
+    |> event(:character, Combat, :vitals)
   end
 end

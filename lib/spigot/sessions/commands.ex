@@ -5,6 +5,7 @@ defmodule Spigot.Sessions.Commands do
 
   use GenServer
 
+  alias Spigot.Actions.Combat
   alias Spigot.Router
   alias Spigot.Views.Commands
   alias Spigot.Views.Login
@@ -25,7 +26,7 @@ defmodule Spigot.Sessions.Commands do
   def handle_info(:welcome, state) do
     send(state.foreman, {:send, Login.render("welcome", state)})
     send(state.foreman, {:send, Commands.render("prompt", state)})
-    send(state.character, {:send, :vitals})
+    send(state.character, %Combat{action: :vitals, params: %{}})
 
     {:noreply, state}
   end

@@ -3,24 +3,26 @@ defmodule Spigot.Commands.Combat do
 
   use Spigot, :command
 
+  alias Spigot.Actions.Combat
+
   def start(conn, _params) do
     conn
     |> render("start")
     |> render(Commands, "prompt")
-    |> forward(:character, {:combat, :start})
+    |> event(:character, Combat, :start)
   end
 
   def stop(conn, _params) do
     conn
     |> render("stop")
     |> render(Commands, "prompt")
-    |> forward(:character, {:combat, :stop})
+    |> event(:character, Combat, :stop)
   end
 
   def tick(conn, _params) do
     conn
     |> render("tick")
     |> render(Commands, "prompt")
-    |> forward(:character, {:send, :vitals})
+    |> event(:character, Combat, :vitals)
   end
 end

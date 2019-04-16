@@ -24,5 +24,9 @@ defmodule Spigot.Router do
     module(Vitals) do
       command("vitals", :base)
     end
+
+    module(Who) do
+      command("who", :base)
+    end
   end
 end

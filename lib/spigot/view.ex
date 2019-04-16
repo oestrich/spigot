@@ -116,3 +116,13 @@ defmodule Spigot.View.Vitals do
     }
   end
 end
+
+defmodule Spigot.View.Who do
+  @moduledoc false
+
+  use Spigot, :view
+
+  def render("who", _assigns) do
+    "Other players online:\n"
+  end
+end

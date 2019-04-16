@@ -10,8 +10,6 @@ defmodule Spigot.View do
 end
 
 defmodule Spigot.View.Commands do
-  @moduledoc false
-
   use Spigot, :view
 
   def render("prompt", _assigns) do
@@ -24,8 +22,6 @@ defmodule Spigot.View.Commands do
 end
 
 defmodule Spigot.View.Combat do
-  @moduledoc false
-
   use Spigot, :view
 
   def render("start", _assigns) do
@@ -45,8 +41,6 @@ defmodule Spigot.View.Combat do
 end
 
 defmodule Spigot.View.Help do
-  @moduledoc false
-
   use Spigot, :view
 
   def render("base", _assigns) do
@@ -61,8 +55,6 @@ defmodule Spigot.View.Help do
 end
 
 defmodule Spigot.View.Login do
-  @moduledoc false
-
   use Spigot, :view
 
   def render("welcome", _assigns) do
@@ -71,8 +63,6 @@ defmodule Spigot.View.Login do
 end
 
 defmodule Spigot.View.OAuth do
-  @moduledoc false
-
   use Spigot, :view
 
   def render("authorization-request", %{params: params}) do
@@ -85,8 +75,6 @@ defmodule Spigot.View.OAuth do
 end
 
 defmodule Spigot.View.Say do
-  @moduledoc false
-
   use Spigot, :view
 
   def render("text", %{text: text}) do
@@ -95,8 +83,6 @@ defmodule Spigot.View.Say do
 end
 
 defmodule Spigot.View.Quit do
-  @moduledoc false
-
   use Spigot, :view
 
   def render("goodbye", _assigns) do
@@ -105,8 +91,6 @@ defmodule Spigot.View.Quit do
 end
 
 defmodule Spigot.View.Vitals do
-  @moduledoc false
-
   use Spigot, :view
 
   def render("vitals", %{vitals: vitals}) do
@@ -118,8 +102,6 @@ defmodule Spigot.View.Vitals do
 end
 
 defmodule Spigot.View.Who do
-  @moduledoc false
-
   use Spigot, :view
 
   def render("who", _assigns) do

@@ -6,7 +6,7 @@ defmodule Spigot.Command do
   """
 
   def forward(conn, process, message) do
-    Map.put(conn, :messages, [{process, message} | conn.messages])
+    Map.put(conn, :messages, conn.messages ++ [{process, message}])
   end
 
   def push(conn, lines) do
@@ -31,6 +31,10 @@ defmodule Spigot.Command do
 end
 
 defmodule Spigot.Command.Router do
+  @moduledoc """
+  Parse player input and match against known patterns
+  """
+
   def parse(patterns, text) do
     text = String.trim(text)
 
@@ -76,7 +80,7 @@ defmodule Spigot.Command.Router do
 end
 
 defmodule Spigot.Command.Router.Macro do
-  @doc """
+  @moduledoc """
   Macro to generate the receive functions
 
       scope(Spigot.Sessions.Commands) do
@@ -86,6 +90,7 @@ defmodule Spigot.Command.Router.Macro do
         end
       end
   """
+
   defmacro scope(module, opts) do
     quote do
       Module.register_attribute(__MODULE__, :patterns, accumulate: true)

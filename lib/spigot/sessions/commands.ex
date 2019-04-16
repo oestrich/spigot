@@ -53,9 +53,11 @@ defmodule Spigot.Sessions.Commands do
 
       conn ->
         send(state.foreman, {:send, conn.lines})
-        Enum.map(conn.messages, fn message ->
+
+        Enum.each(conn.messages, fn message ->
           forward(state, message)
         end)
+
         {:noreply, state}
     end
   end

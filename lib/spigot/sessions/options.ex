@@ -95,6 +95,8 @@ defmodule Spigot.Sessions.Options do
 end
 
 defmodule Spigot.Sessions.Options.OAuth do
+  @moduledoc false
+
   use Spigot, :action
 
   def authorization_request(state, %{"host" => "grapevine.haus"}) do

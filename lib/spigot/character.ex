@@ -11,6 +11,7 @@ defmodule Spigot.Character.Vitals do
   Struct for character vitals such as health
   """
 
+  @derive Jason.Encoder
   defstruct [
     :health_points, :max_health_points,
     :skill_points, :max_skill_points,

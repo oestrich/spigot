@@ -37,25 +37,24 @@ defmodule Spigot.Sessions.Character do
   end
 
   def handle_info({:send, :vitals}, state) do
-    push(state, render(Vitals, "vitals", state))
+    render(state, Vitals, "vitals", %{vitals: state.vitals})
     {:noreply, state}
   end
 
   def handle_info({:combat, :start}, state) do
-    Logger.debug("Starting combat")
-    state = Combat.start(state)
-    {:noreply, state}
+    process_action(state, &Combat.start/1)
   end
 
   def handle_info({:combat, :stop}, state) do
-    Logger.debug("Stopping combat")
-    state = Combat.stop(state)
-    {:noreply, state}
+    process_action(state, &Combat.stop/1)
   end
 
   def handle_info({:combat, :tick}, state) do
-    Logger.debug("Ticking combat")
-    state = Combat.tick(state)
+    process_action(state, &Combat.tick/1)
+  end
+
+  defp process_action(state, fun) do
+    state = fun.(state)
     {:noreply, state}
   end
 end
@@ -70,7 +69,7 @@ defmodule Spigot.Sessions.Character.Combat do
 
   use Spigot, :action
 
-  alias Spigot.View.Combat, as: CombatView
+  alias Spigot.View.Combat
   alias Spigot.View.Vitals
 
   @delay 1000
@@ -88,9 +87,10 @@ defmodule Spigot.Sessions.Character.Combat do
   def tick(state = %{combat: true}) do
     Process.send_after(self(), {:combat, :tick}, @delay)
     state = adjust_vitals(state)
-    push(state, render(Vitals, "vitals", state))
-    push(state, render(CombatView, "tick", state))
+
     state
+    |> render(Vitals, "vitals", state)
+    |> render(Combat, "tick", state)
   end
 
   def tick(state), do: state

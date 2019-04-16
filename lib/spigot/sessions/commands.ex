@@ -51,10 +51,21 @@ defmodule Spigot.Sessions.Commands do
         send(state.foreman, {:send, Commands.render("prompt", %{})})
         {:noreply, state}
 
-      result ->
-        send(state.foreman, {:send, result.lines})
+      conn ->
+        send(state.foreman, {:send, conn.lines})
+        Enum.map(conn.messages, fn message ->
+          forward(state, message)
+        end)
         {:noreply, state}
     end
+  end
+
+  defp forward(state, {:character, message}) do
+    send(state.character, message)
+  end
+
+  defp forward(state, {:foreman, message}) do
+    send(state.foreman, message)
   end
 end
 
@@ -64,27 +75,24 @@ defmodule Spigot.Sessions.Commands.Combat do
   use Spigot, :command
 
   def start(conn, _params) do
-    send(conn.character, {:combat, :start})
-
     conn
     |> render("start")
     |> render(Commands, "prompt")
+    |> forward(:character, {:combat, :start})
   end
 
   def stop(conn, _params) do
-    send(conn.character, {:combat, :stop})
-
     conn
     |> render("stop")
     |> render(Commands, "prompt")
+    |> forward(:character, {:combat, :stop})
   end
 
   def tick(conn, _params) do
-    send(conn.character, {:send, :vitals})
-
     conn
     |> render("tick")
     |> render(Commands, "prompt")
+    |> forward(:character, {:send, :vitals})
   end
 end
 
@@ -110,8 +118,9 @@ defmodule Spigot.Sessions.Commands.Quit do
   use Spigot, :command
 
   def base(conn, _params) do
-    send(conn.foreman, :stop)
-    render(conn, "goodbye")
+    conn
+    |> render("goodbye")
+    |> forward(:foreman, :stop)
   end
 end
 
@@ -133,10 +142,9 @@ defmodule Spigot.Sessions.Commands.Vitals do
   use Spigot, :command
 
   def base(conn, _params) do
-    send(conn.character, {:send, :vitals})
-
     conn
     |> push("Sending vitals...\n")
     |> render(Commands, "prompt")
+    |> forward(:character, {:send, :vitals})
   end
 end

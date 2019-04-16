@@ -1,20 +1,13 @@
 defmodule Spigot.Command do
   @moduledoc """
-  Behaviour for commands
-  """
-
-  def view_module(module) do
-    base_module = List.last(String.split(to_string(module), "."))
-    String.to_atom(Enum.join(["Elixir", "Spigot", "View", base_module], "."))
-  end
-end
-
-defmodule Spigot.Command.Functions do
-  @moduledoc """
-  Helper functions for a command
+  Functions for a command
 
   Push and render output
   """
+
+  def forward(conn, process, message) do
+    Map.put(conn, :messages, [{process, message} | conn.messages])
+  end
 
   def push(conn, lines) do
     Map.put(conn, :lines, conn.lines ++ List.wrap(lines))

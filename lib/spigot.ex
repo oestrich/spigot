@@ -9,16 +9,21 @@ defmodule Spigot do
 
   def action() do
     quote do
+      @view Spigot.View.view_module(__MODULE__)
+
       import Spigot.Action
+
+      def view(), do: @view
     end
   end
 
   def command() do
     quote do
-      @view Spigot.Command.view_module(__MODULE__)
+      @view Spigot.View.view_module(__MODULE__)
 
-      import Spigot.Command.Functions
+      import Spigot.Command
 
+      # For the prompt
       alias Spigot.View.Commands
 
       def view(), do: @view

@@ -71,8 +71,17 @@ defmodule Spigot.Telnet.Server do
     end)
   end
 
-  defp push(state, output = %Event{}) do
+  defp push(state, output = %Event{type: :game}) do
     data = <<255, 250, 201>>
+    data = data <> output.topic <> " "
+    data = data <> Jason.encode!(output.data)
+    data = data <> <<255, 240>>
+
+    state.transport.send(state.socket, data)
+  end
+
+  defp push(state, output = %Event{type: :oauth}) do
+    data = <<255, 250, 165>>
     data = data <> output.topic <> " "
     data = data <> Jason.encode!(output.data)
     data = data <> <<255, 240>>

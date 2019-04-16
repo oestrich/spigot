@@ -5,9 +5,10 @@ defmodule Spigot.Action do
 
   def push(state, lines) do
     send(state.foreman, {:send, lines})
+    state
   end
 
-  def render(view, template, assigns) do
-    view.render(template, assigns)
+  def render(state, view, template, assigns) do
+    push(state, view.render(template, assigns))
   end
 end

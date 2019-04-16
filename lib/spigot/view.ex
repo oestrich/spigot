@@ -2,6 +2,11 @@ defmodule Spigot.View do
   @moduledoc """
   Render output from the game
   """
+
+  def view_module(module) do
+    base_module = List.last(String.split(to_string(module), "."))
+    String.to_atom(Enum.join(["Elixir", "Spigot", "View", base_module], "."))
+  end
 end
 
 defmodule Spigot.View.Commands do
@@ -62,6 +67,20 @@ defmodule Spigot.View.Login do
 
   def render("welcome", _assigns) do
     "Welcome to #{IO.ANSI.cyan()}Spigot.#{IO.ANSI.reset()}\n"
+  end
+end
+
+defmodule Spigot.View.OAuth do
+  @moduledoc false
+
+  use Spigot, :view
+
+  def render("authorization-request", %{params: params}) do
+    %Event{
+      type: :oauth,
+      topic: "AuthorizationRequest",
+      data: params
+    }
   end
 end
 

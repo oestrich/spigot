@@ -86,7 +86,7 @@ defmodule Spigot.Sessions.Options do
       "OAuth Start: #{inspect params}"
     end)
 
-    OAuth.authorization_request(state, params)
+    state = OAuth.authorization_request(state, params)
 
     {:noreply, state}
   end
@@ -105,7 +105,7 @@ defmodule Spigot.Sessions.Options.OAuth do
       state: UUID.uuid4()
     }
 
-    push(state, <<255, 250, 165>> <> "AuthorizationRequest" <> Jason.encode!(params) <> <<255, 240>>)
+    render(state, view(), "authorization-request", %{params: params})
   end
 
   def authorization_request(_, _), do: :ok

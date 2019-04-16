@@ -9,7 +9,7 @@ defmodule Spigot.Conn do
   Struct for tracking data being processed in a command or action
   """
 
-  defstruct [:foreman, :character, :params, :assigns, private: %Spigot.Conn.Private{}, lines: []]
+  defstruct [:foreman, :character, :params, :assigns, messages: [], private: %Spigot.Conn.Private{}, lines: []]
 end
 
 defmodule Spigot.Conn.Event do
@@ -17,5 +17,5 @@ defmodule Spigot.Conn.Event do
   Send an out of band Event
   """
 
-  defstruct [:topic, :data]
+  defstruct [:topic, :data, type: :game]
 end

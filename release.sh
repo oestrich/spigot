@@ -14,5 +14,5 @@ mkdir -p tmp/
 docker build --build-arg sha=${SHA} --build-arg cookie=${COOKIE} -f Dockerfile.releaser -t spigot:releaser .
 
 docker run -ti --name spigot_releaser_${DOCKER_UUID} spigot:releaser /bin/true
-docker cp spigot_releaser_${DOCKER_UUID}:/app/_build/prod/rel/spigot/releases/1.0.0/spigot.tar.gz tmp/
+docker cp spigot_releaser_${DOCKER_UUID}:/app/_build/prod/rel/spigot/releases/0.1.0/spigot.tar.gz tmp/
 docker rm spigot_releaser_${DOCKER_UUID}

@@ -3,15 +3,13 @@ defmodule Spigot.Sessions.Options do
   Process to parse telnet options from the client
   """
 
-  use GenServer
+  use Spigot, :sink
 
   require Logger
 
-  alias __MODULE__.OAuth
+  alias Spigot.Actions.OAuth
 
-  def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts)
-  end
+  actions(OAuth, [:authorization_request])
 
   def init(opts) do
     state = %{
@@ -82,33 +80,10 @@ defmodule Spigot.Sessions.Options do
   end
 
   defp process_option(state, {:oauth, "Start", params}) do
-    Logger.debug(fn ->
-      "OAuth Start: #{inspect params}"
-    end)
-
-    state = OAuth.authorization_request(state, params)
-
+    send(self(), %OAuth{action: :authorization_request, params: params})
     {:noreply, state}
   end
 
   defp process_option(state, _option), do: {:noreply, state}
 end
 
-defmodule Spigot.Sessions.Options.OAuth do
-  @moduledoc false
-
-  use Spigot, :action
-
-  def authorization_request(state, %{"host" => "grapevine.haus"}) do
-    params = %{
-      response_type: "code",
-      client_id: "cb61f1cd-a8b8-445e-91b7-282bccbff890",
-      scope: "profile email",
-      state: UUID.uuid4()
-    }
-
-    render(state, view(), "authorization-request", %{params: params})
-  end
-
-  def authorization_request(_, _), do: :ok
-end

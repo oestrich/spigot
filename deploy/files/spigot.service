@@ -1,0 +1,18 @@
+[Unit]
+Description=Spigot
+After=network.target
+
+[Service]
+User=deploy
+Group=deploy
+WorkingDirectory=/home/deploy/spigot
+Environment=LANG=en_US.UTF-8
+ExecStart=/home/deploy/spigot/bin/spigot foreground
+SyslogIdentifier=spigot
+RemainAfterExit=no
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=epmd.service

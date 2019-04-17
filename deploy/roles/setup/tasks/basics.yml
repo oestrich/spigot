@@ -1,0 +1,41 @@
+---
+
+- name: Check that the spigot config exists
+  stat:
+    path: /etc/spigot.config.exs
+  register: spigot_config
+
+- name: copy spigot config
+  copy:
+    src: spigot.config.exs
+    dest: /etc/spigot.config.exs
+    mode: 0644
+  when: not spigot_config.stat.exists
+  become: yes
+
+- name: make spigot directory
+  file:
+    dest: /home/deploy/spigot
+    state: directory
+  become: yes
+  become_user: deploy
+
+- name: copy systemd file
+  copy:
+    src: spigot.service
+    dest: /etc/systemd/system/spigot.service
+  become: yes
+  notify: reload systemd
+
+- name: enable spigot service
+  systemd:
+    name: spigot.service
+    enabled: yes
+  become: yes
+
+- name: link the v5 of ncurses.so
+  file:
+    src: /lib/x86_64-linux-gnu/libncursesw.so.5
+    dest: /lib/x86_64-linux-gnu/libncursesw.so.6
+    state: link
+  become: yes

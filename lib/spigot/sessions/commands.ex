@@ -24,7 +24,7 @@ defmodule Spigot.Sessions.Commands do
   end
 
   def handle_info(:welcome, state) do
-    send(state.foreman, {:send, Login.render("welcome", state)})
+    send(state.foreman, {:send, Login.render("logged-in", state)})
     send(state.foreman, {:send, Commands.render("prompt", state)})
     send(state.character, %Combat{action: :vitals, params: %{}})
 

@@ -6,61 +6,98 @@ defmodule Spigot.Sessions.Foreman do
   the processes. Starts the `Spigot.Sessions.Options` process on boot.
   """
 
-  use GenServer
+  @behaviour :gen_statem
+
+  defstruct [:session, :protocol, :tether, :auth, :character, :commands, :options]
 
   alias Spigot.Sessions.Session
 
-  def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts)
+  @impl true
+  def callback_mode(), do: :state_functions
+
+  def child_spec(args) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, [args]},
+      restart: :permanent,
+      shutdown: 5000,
+      type: :worker
+    }
   end
 
+  def start_link(opts) do
+    :gen_statem.start_link(__MODULE__, opts, [])
+  end
+
+  @impl true
   def init(opts) do
-    state = %{
+    data = %__MODULE__{
       session: opts[:session],
       protocol: opts[:protocol]
     }
 
-    {:ok, state, {:continue, :init}}
+    actions = [{:next_event, :internal, :initialize}]
+
+    {:ok, :uninitialized, data, actions}
   end
 
-  def handle_continue(:init, state) do
-    {:ok, state} = Session.start_tether(state)
-    {:ok, state} = Session.start_character(state)
-    {:ok, state} = Session.start_commands(state)
-    {:ok, state} = Session.start_options(state)
+  def uninitialized(:internal, :initialize, data) do
+    {:ok, data} = Session.start_tether(data)
+    {:ok, data} = Session.start_auth(data)
+    {:ok, data} = Session.start_character(data)
+    {:ok, data} = Session.start_commands(data)
+    {:ok, data} = Session.start_options(data)
 
-    send(state.protocol, {:takeover, self()})
+    send(data.protocol, {:takeover, self()})
 
-    {:noreply, state, {:continue, :login}}
+    {:next_state, :initialized, data, [{:next_event, :internal, :login}]}
   end
 
-  def handle_continue(:login, state) do
-    send(state.commands, :welcome)
-    {:noreply, state}
+  def initialized(:internal, :login, data) do
+    send(data.auth, :welcome)
+    {:next_state, :unauthenticated, data}
   end
 
-  def handle_info({:recv, :option, option}, state) do
-    send(state.options, {:recv, option})
-    {:noreply, state}
+  def unauthenticated(:info, {:recv, :text, telnet_data}, data) do
+    send(data.auth, {:recv, telnet_data})
+    :keep_state_and_data
   end
 
-  def handle_info({:recv, :text, data}, state) do
-    send(state.commands, {:recv, data})
-    {:noreply, state}
+  def unauthenticated(:info, {:auth, :logged_in}, data) do
+    send(data.commands, :welcome)
+    {:next_state, :authenticated, data}
   end
 
-  def handle_info({:send, data}, state) do
-    send(state.protocol, {:send, data})
-    {:noreply, state}
+  def unauthenticated(type, message, data) do
+    handle_common(type, message, data)
   end
 
-  def handle_info(:stop, state) do
-    send(state.protocol, :terminate)
-    {:noreply, state}
+  def authenticated(:info, {:recv, :text, telnet_data}, data) do
+    send(data.commands, {:recv, telnet_data})
+    :keep_state_and_data
   end
 
-  def handle_info(:terminate, state) do
-    Session.terminate(state)
-    {:noreply, state}
+  def authenticated(type, message, data) do
+    handle_common(type, message, data)
+  end
+
+  def handle_common(:info, {:recv, :option, option}, data) do
+    send(data.options, {:recv, option})
+    :keep_state_and_data
+  end
+
+  def handle_common(:info, {:send, telnet_data}, data) do
+    send(data.protocol, {:send, telnet_data})
+    :keep_state_and_data
+  end
+
+  def handle_common(:info, :stop, data) do
+    send(data.protocol, :terminate)
+    :keep_state_and_data
+  end
+
+  def handle_common(:info, :terminate, data) do
+    Session.terminate(data)
+    :keep_state_and_data
   end
 end

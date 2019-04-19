@@ -9,6 +9,7 @@ defmodule Spigot.Actions.OAuth do
 
   def authorization_request(state, %{"host" => "grapevine.haus"}) do
     Logger.info("Starting oauth request")
+
     params = %{
       response_type: "code",
       client_id: Grapevine.client_id(),

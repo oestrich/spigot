@@ -6,6 +6,6 @@ defmodule Spigot.Views.Login do
   end
 
   def render("welcome", _assigns) do
-    "Please enter a username\n>"
+    "Please enter a username\n> "
   end
 end

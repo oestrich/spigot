@@ -5,6 +5,8 @@ defmodule Spigot.Grapevine do
 
   @config Application.get_env(:spigot, :grapevine)
 
+  def client_id(), do: @config[:client_id]
+
   def authorize(code) do
     params = %{
       client_id: @config[:client_id],

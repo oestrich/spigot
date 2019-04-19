@@ -5,11 +5,13 @@ defmodule Spigot.Actions.OAuth do
 
   require Logger
 
+  alias Spigot.Grapevine
+
   def authorization_request(state, %{"host" => "grapevine.haus"}) do
     Logger.info("Starting oauth request")
     params = %{
       response_type: "code",
-      client_id: "cb61f1cd-a8b8-445e-91b7-282bccbff890",
+      client_id: Grapevine.client_client(),
       scope: "profile email",
       state: UUID.uuid4(),
       redirect_uri: "urn:ietf:wg:oauth:2.0:oob"

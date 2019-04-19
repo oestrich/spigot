@@ -11,7 +11,8 @@ defmodule Spigot.Actions.OAuth do
       response_type: "code",
       client_id: "cb61f1cd-a8b8-445e-91b7-282bccbff890",
       scope: "profile email",
-      state: UUID.uuid4()
+      state: UUID.uuid4(),
+      redirect_uri: "urn:ietf:wg:oauth:2.0:oob"
     }
 
     render(state, view(), "authorization-request", %{params: params})

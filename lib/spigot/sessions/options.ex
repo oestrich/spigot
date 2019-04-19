@@ -14,6 +14,7 @@ defmodule Spigot.Sessions.Options do
   def init(opts) do
     state = %{
       foreman: opts[:foreman],
+      auth: opts[:auth],
       oauth: false,
       gmcp: false
     }
@@ -81,6 +82,11 @@ defmodule Spigot.Sessions.Options do
 
   defp process_option(state, {:oauth, "Start", params}) do
     send(self(), %OAuth{action: :authorization_request, params: params})
+    {:noreply, state}
+  end
+
+  defp process_option(state, {:oauth, "AuthorizationGrant", params}) do
+    send(state.auth, %OAuth{action: :authorization_grant, params: params})
     {:noreply, state}
   end
 

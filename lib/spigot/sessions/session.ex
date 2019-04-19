@@ -55,7 +55,7 @@ defmodule Spigot.Sessions.Session do
   end
 
   def start_options(foreman_state) do
-    opts = [foreman: self()]
+    opts = [foreman: self(), auth: foreman_state.auth]
     {:ok, options} = DynamicSupervisor.start_child(foreman_state.tether, {Options, opts})
     Process.link(options)
     foreman_state = Map.put(foreman_state, :options, options)

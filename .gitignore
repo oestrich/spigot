@@ -25,3 +25,5 @@ spigot-*.tar
 *.sh
 
 /tmp/
+
+/config/dev.local.exs

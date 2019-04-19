@@ -1,8 +1,8 @@
 defmodule Spigot.Views.Login do
   use Spigot, :view
 
-  def render("logged-in", _assigns) do
-    "Welcome to #{IO.ANSI.cyan()}Spigot.#{IO.ANSI.reset()}\n"
+  def render("logged-in", %{username: username}) do
+    "\nWelcome to #{IO.ANSI.cyan()}Spigot#{IO.ANSI.reset()}, #{username}.\n"
   end
 
   def render("welcome", _assigns) do

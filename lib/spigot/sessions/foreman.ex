@@ -63,8 +63,8 @@ defmodule Spigot.Sessions.Foreman do
     :keep_state_and_data
   end
 
-  def unauthenticated(:info, {:auth, :logged_in}, data) do
-    send(data.commands, :welcome)
+  def unauthenticated(:info, {:auth, :logged_in, username}, data) do
+    send(data.commands, {:welcome, username})
     {:next_state, :authenticated, data}
   end
 

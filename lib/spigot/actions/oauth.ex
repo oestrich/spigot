@@ -11,7 +11,7 @@ defmodule Spigot.Actions.OAuth do
     Logger.info("Starting oauth request")
     params = %{
       response_type: "code",
-      client_id: Grapevine.client_client(),
+      client_id: Grapevine.client_id(),
       scope: "profile email",
       state: UUID.uuid4(),
       redirect_uri: "urn:ietf:wg:oauth:2.0:oob"

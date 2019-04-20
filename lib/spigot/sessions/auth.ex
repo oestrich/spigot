@@ -1,3 +1,11 @@
+defmodule Spigot.Sessions.Auth.OAuth do
+  @moduledoc """
+  Struct for triggering OAuth
+  """
+
+  defstruct [:action, :params]
+end
+
 defmodule Spigot.Sessions.Auth do
   @moduledoc """
   Authorization Process
@@ -7,7 +15,8 @@ defmodule Spigot.Sessions.Auth do
 
   use GenServer
 
-  alias Spigot.Actions.OAuth
+  alias Spigot.Sessions.Auth.OAuth
+  alias Spigot.Conn.Event
   alias Spigot.Grapevine
   alias Spigot.Views.Login
 
@@ -39,6 +48,11 @@ defmodule Spigot.Sessions.Auth do
     {:noreply, state}
   end
 
+  def handle_info(%OAuth{action: :authorization_request, params: params}, state) do
+    authorization_request(state, params)
+    {:noreply, state}
+  end
+
   def handle_info(%OAuth{action: :authorization_grant, params: params}, state) do
     with {:ok, token} <- Grapevine.authorize(params["code"]),
          {:ok, info} <- Grapevine.info(token["access_token"]) do
@@ -47,4 +61,21 @@ defmodule Spigot.Sessions.Auth do
 
     {:noreply, state}
   end
+
+  defp authorization_request(state, %{"host" => "grapevine.haus"}) do
+    event = %Event{
+      type: :oauth,
+      topic: "AuthorizationRequest",
+      data: %{
+        response_type: "code",
+        client_id: Grapevine.client_id(),
+        scope: "profile email",
+        state: UUID.uuid4(),
+        redirect_uri: "urn:ietf:wg:oauth:2.0:oob"
+      }
+    }
+    send(state.foreman, {:send, event})
+  end
+
+  defp authorization_request(_state, _params), do: :ok
 end

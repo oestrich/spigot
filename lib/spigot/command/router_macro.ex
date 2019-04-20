@@ -16,6 +16,7 @@ defmodule Spigot.Command.RouterMacro do
   defmacro scope(module, opts) do
     quote do
       Module.register_attribute(__MODULE__, :patterns, accumulate: true)
+      Module.register_attribute(__MODULE__, :commands, accumulate: true)
 
       unquote(parse_modules(module, opts[:do]))
 
@@ -28,6 +29,18 @@ defmodule Spigot.Command.RouterMacro do
           {:error, :unknown} ->
             {:error, :unknown}
         end
+      end
+
+      @doc """
+      All known commands
+      """
+      def commands() do
+        @commands
+        |> Enum.map(fn {command, _fun} ->
+          command
+        end)
+        |> Enum.uniq()
+        |> Enum.sort()
       end
 
       def parse(text) do
@@ -68,6 +81,7 @@ defmodule Spigot.Command.RouterMacro do
 
     quote do
       @patterns unquote(pattern)
+      @commands {unquote(module), unquote(fun)}
 
       def receive(unquote(pattern), conn) do
         private = Map.put(conn.private, :view, unquote(module).view())

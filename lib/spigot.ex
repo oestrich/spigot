@@ -34,7 +34,7 @@ defmodule Spigot do
 
   def view() do
     quote do
-      @moduledoc false
+      import Spigot.View.Macro
 
       alias Spigot.Conn.Event
     end

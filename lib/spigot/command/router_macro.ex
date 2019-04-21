@@ -35,12 +35,7 @@ defmodule Spigot.Command.RouterMacro do
       All known commands
       """
       def commands() do
-        @commands
-        |> Enum.map(fn {command, _fun} ->
-          command
-        end)
-        |> Enum.uniq()
-        |> Enum.sort()
+        Enum.sort(@commands)
       end
 
       def parse(text) do
@@ -81,7 +76,7 @@ defmodule Spigot.Command.RouterMacro do
 
     quote do
       @patterns unquote(pattern)
-      @commands {unquote(module), unquote(fun)}
+      @commands {unquote(module), unquote(pattern), unquote(fun)}
 
       def receive(unquote(pattern), conn) do
         private = Map.put(conn.private, :view, unquote(module).view())

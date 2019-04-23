@@ -1,5 +1,7 @@
 defmodule Spigot.Commands.Crash do
-  @moduledoc "Crash the commands process"
+  @moduledoc """
+  Crash the commands process
+  """
 
   use Spigot, :command
 

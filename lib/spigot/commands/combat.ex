@@ -1,5 +1,7 @@
 defmodule Spigot.Commands.Combat do
-  @moduledoc "Fake combat"
+  @moduledoc """
+  Fake combat
+  """
 
   use Spigot, :command
 

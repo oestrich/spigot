@@ -21,7 +21,6 @@ defmodule Spigot.Views.Help do
     ----
     <%= docs %>
 
-
     <%= Enum.map(commands, fn command -> %>
     <%= render("_command", %{command: command}) %>
     <% end) %>

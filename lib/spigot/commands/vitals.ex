@@ -1,5 +1,7 @@
 defmodule Spigot.Commands.Vitals do
-  @moduledoc "Terminate your session"
+  @moduledoc """
+  Terminate your session
+  """
 
   use Spigot, :command
 

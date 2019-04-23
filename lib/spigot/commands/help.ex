@@ -1,5 +1,7 @@
 defmodule Spigot.Commands.Help do
-  @moduledoc "View help"
+  @moduledoc """
+  View help
+  """
 
   use Spigot, :command
 

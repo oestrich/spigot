@@ -5,6 +5,9 @@ defmodule Spigot.Commands.Crash do
 
   use Spigot, :command
 
+  @doc """
+  Raises an exception in order to crash your session
+  """
   def base(_conn, _params) do
     raise "Crashing now"
   end

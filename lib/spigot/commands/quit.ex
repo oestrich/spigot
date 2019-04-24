@@ -5,6 +5,9 @@ defmodule Spigot.Commands.Quit do
 
   use Spigot, :command
 
+  @doc """
+  Sign out
+  """
   def base(conn, _params) do
     conn
     |> render("goodbye")

@@ -5,6 +5,9 @@ defmodule Spigot.Commands.Who do
 
   use Spigot, :command
 
+  @doc """
+  View other players
+  """
   def base(conn, _params) do
     conn
     |> render("who")

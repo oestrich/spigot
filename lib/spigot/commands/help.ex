@@ -22,7 +22,8 @@ defmodule Spigot.Commands.Help do
   def topic(conn, %{"topic" => topic}) do
     with {:ok, help} <- Help.find(topic) do
       conn
-      |> render("topic", help)
+      |> render("topic.text", help)
+      |> render("topic.modal", help)
       |> render(Commands, "prompt")
     else
       {:error, :not_found} ->

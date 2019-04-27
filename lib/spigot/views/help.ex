@@ -14,11 +14,28 @@ defmodule Spigot.Views.Help do
     """
   end
 
-  def render("topic", %{topic: topic, docs: docs, commands: commands}) do
+  def render("topic.text", %{topic: topic, docs: docs, commands: commands}) do
     ~E"""
     <%= topic %>
 
     ----
+    <%= render("_topic_body", %{docs: docs, commands: commands}) %>
+    """
+  end
+
+  def render("topic.modal", %{topic: topic, docs: docs, commands: commands}) do
+    %Event{
+      topic: "Client.Modals.Open",
+      data: %{
+        key: "help-#{topic}",
+        title: topic,
+        body: render("_topic_body", %{docs: docs, commands: commands})
+      }
+    }
+  end
+
+  def render("_topic_body", %{docs: docs, commands: commands}) do
+    ~E"""
     <%= docs %>
 
     <%= Enum.map(commands, fn command -> %>

@@ -52,10 +52,6 @@ defmodule Spigot do
       use GenServer
 
       import Spigot.Sink
-
-      def start_link(opts) do
-        GenServer.start_link(__MODULE__, opts)
-      end
     end
   end
 end

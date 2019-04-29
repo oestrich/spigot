@@ -44,8 +44,6 @@ defmodule Spigot.Sessions.Foreman do
   def uninitialized(:internal, :initialize, data) do
     {:ok, data} = Session.start_tether(data)
     {:ok, data} = Session.start_auth(data)
-    {:ok, data} = Session.start_character(data)
-    {:ok, data} = Session.start_commands(data)
     {:ok, data} = Session.start_options(data)
 
     send(data.protocol, {:takeover, self()})
@@ -64,6 +62,8 @@ defmodule Spigot.Sessions.Foreman do
   end
 
   def unauthenticated(:info, {:auth, :logged_in, username}, data) do
+    {:ok, data} = Session.start_character(data, username)
+    {:ok, data} = Session.start_commands(data)
     send(data.commands, {:welcome, username})
     {:next_state, :authenticated, data}
   end

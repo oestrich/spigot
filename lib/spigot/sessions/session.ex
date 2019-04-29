@@ -7,8 +7,8 @@ defmodule Spigot.Sessions.Session do
 
   use Supervisor
 
+  alias Spigot.Characters
   alias Spigot.Sessions.Auth
-  alias Spigot.Sessions.Character
   alias Spigot.Sessions.Commands
   alias Spigot.Sessions.Foreman
   alias Spigot.Sessions.Options
@@ -38,9 +38,9 @@ defmodule Spigot.Sessions.Session do
     {:ok, foreman_state}
   end
 
-  def start_character(foreman_state) do
-    opts = [foreman: self()]
-    {:ok, character} = DynamicSupervisor.start_child(foreman_state.tether, {Character, opts})
+  def start_character(foreman_state, name) do
+    opts = [foreman: self(), name: name]
+    {:ok, character} = Characters.start(opts)
     Process.link(character)
     foreman_state = Map.put(foreman_state, :character, character)
     {:ok, foreman_state}

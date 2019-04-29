@@ -7,6 +7,8 @@ defmodule Spigot.Application do
 
   def start(_type, _args) do
     children = [
+      {Registry, [keys: :unique, name: Spigot.Characters.Registry]},
+      {Spigot.Characters, [name: Spigot.Characters]},
       {Spigot.Sessions, [name: Spigot.Sessions]}
     ]
 

@@ -3,7 +3,7 @@ defmodule Spigot.Character do
   Struct for character data
   """
 
-  defstruct [:vitals]
+  defstruct [:name, :vitals]
 end
 
 defmodule Spigot.Character.Vitals do

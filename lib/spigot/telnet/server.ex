@@ -48,7 +48,15 @@ defmodule Spigot.Telnet.Server do
     process_data(state, data)
   end
 
+  def handle_info({:ssl, _socket, data}, state) do
+    process_data(state, data)
+  end
+
   def handle_info({:tcp_closed, _socket}, state) do
+    handle_info(:terminate, state)
+  end
+
+  def handle_info({:ssl_closed, _socket}, state) do
     handle_info(:terminate, state)
   end
 

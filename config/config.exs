@@ -4,7 +4,9 @@ use Mix.Config
 
 config :spigot, :grapevine, host: "https://grapevine.haus/"
 
-config :spigot, :listener, start: true
+config :spigot, :listener,
+  start: true,
+  tls: true
 
 config :logger, level: :debug
 

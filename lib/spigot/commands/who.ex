@@ -5,12 +5,14 @@ defmodule Spigot.Commands.Who do
 
   use Spigot, :command
 
+  alias Spigot.Players
+
   @doc """
   View other players
   """
   def base(conn, _params) do
     conn
-    |> render("who")
+    |> render("who", %{players: Players.online()})
     |> render(Commands, "prompt")
   end
 end

@@ -6,6 +6,7 @@ defmodule Spigot.Characters do
   use DynamicSupervisor
 
   alias Spigot.Characters.Character
+  alias Spigot.Players
 
   @doc false
   def start_link(opts) do
@@ -16,7 +17,7 @@ defmodule Spigot.Characters do
   Start a new Character GenServer
   """
   def start(opts) do
-    case GenServer.whereis(Character.pid(opts)) do
+    case Players.whereis(opts[:name]) do
       nil ->
         DynamicSupervisor.start_child(__MODULE__, {Character, opts})
 

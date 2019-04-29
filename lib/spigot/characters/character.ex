@@ -9,6 +9,7 @@ defmodule Spigot.Characters.Character do
 
   alias Spigot.Actions.Combat
   alias Spigot.Character
+  alias Spigot.Players
 
   @timeout 15_000
 
@@ -16,7 +17,7 @@ defmodule Spigot.Characters.Character do
 
   @doc false
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: pid(opts))
+    GenServer.start_link(__MODULE__, opts)
   end
 
   @doc false
@@ -28,13 +29,6 @@ defmodule Spigot.Characters.Character do
       shutdown: 5000,
       type: :worker
     }
-  end
-
-  @doc """
-  Create a :via tuple to access the user
-  """
-  def pid(opts) do
-    {:via, Registry, {Spigot.Characters.Registry, opts[:name]}}
   end
 
   def takeover(pid, opts) do
@@ -59,6 +53,7 @@ defmodule Spigot.Characters.Character do
     }
 
     Process.flag(:trap_exit, true)
+    Players.online(state.character)
 
     {:ok, state}
   end

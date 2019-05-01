@@ -6,7 +6,7 @@ defmodule Engine.Characters do
   use DynamicSupervisor
 
   alias Engine.Players
-  alias Spigot.Sinks.Character
+  alias Spigot.Character
 
   @doc false
   def start_link(opts) do

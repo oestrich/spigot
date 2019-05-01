@@ -1,4 +1,4 @@
-defmodule Spigot.Sink do
+defmodule Engine.Sink do
   @moduledoc """
   A gensever that processes actions
   """

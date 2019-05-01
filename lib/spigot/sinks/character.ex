@@ -1,4 +1,4 @@
-defmodule Spigot.Characters.Character do
+defmodule Spigot.Sinks.Character do
   @moduledoc """
   Session Character
 
@@ -7,9 +7,9 @@ defmodule Spigot.Characters.Character do
 
   use Spigot, :sink
 
+  alias Engine.Players
   alias Spigot.Actions.Combat
   alias Spigot.Character
-  alias Spigot.Players
 
   @timeout 15_000
 

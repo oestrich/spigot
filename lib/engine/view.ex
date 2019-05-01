@@ -1,4 +1,4 @@
-defmodule Spigot.View do
+defmodule Engine.View do
   @moduledoc """
   Render output from the game
   """
@@ -9,7 +9,7 @@ defmodule Spigot.View do
   end
 end
 
-defmodule Spigot.View.Macro do
+defmodule Engine.View.Macro do
   @moduledoc """
   Imported into views
   """

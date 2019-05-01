@@ -1,4 +1,4 @@
-defmodule Spigot.Command do
+defmodule Engine.Command do
   @moduledoc """
   Functions for a command
 

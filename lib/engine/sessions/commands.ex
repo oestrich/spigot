@@ -1,4 +1,4 @@
-defmodule Spigot.Sessions.Commands do
+defmodule Engine.Sessions.Commands do
   @moduledoc """
   Process to parse telnet options from the client
   """
@@ -40,7 +40,7 @@ defmodule Spigot.Sessions.Commands do
   end
 
   defp process_command(state, command_text) do
-    conn = %Spigot.Conn{
+    conn = %Engine.Conn{
       foreman: state.foreman,
       character: state.character,
       assigns: %{}

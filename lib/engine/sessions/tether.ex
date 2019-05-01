@@ -1,4 +1,4 @@
-defmodule Spigot.Sessions.Tether do
+defmodule Engine.Sessions.Tether do
   @moduledoc """
   Tether to delete all child specs underneath on crash
   """

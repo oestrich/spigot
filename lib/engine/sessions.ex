@@ -1,12 +1,12 @@
-defmodule Spigot.Sessions do
+defmodule Engine.Sessions do
   @moduledoc """
   Supervisor of sessions
   """
 
   use DynamicSupervisor
 
-  alias Spigot.Sessions.Foreman
-  alias Spigot.Sessions.Session
+  alias Engine.Sessions.Foreman
+  alias Engine.Sessions.Session
 
   @doc false
   def start_link(opts) do

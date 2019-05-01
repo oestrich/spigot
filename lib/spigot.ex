@@ -9,9 +9,9 @@ defmodule Spigot do
 
   def action() do
     quote do
-      @view Spigot.View.view_module(__MODULE__)
+      @view Engine.View.view_module(__MODULE__)
 
-      import Spigot.Action
+      import Engine.Action
 
       defstruct [:action, :params]
 
@@ -21,9 +21,9 @@ defmodule Spigot do
 
   def command() do
     quote do
-      @view Spigot.View.view_module(__MODULE__)
+      @view Engine.View.view_module(__MODULE__)
 
-      import Spigot.Command
+      import Engine.Command
 
       # For the prompt
       alias Spigot.Views.Commands
@@ -34,16 +34,16 @@ defmodule Spigot do
 
   def view() do
     quote do
-      import Spigot.View.Macro
+      import Engine.View.Macro
 
-      alias Spigot.Conn.Event
+      alias Engine.Conn.Event
     end
   end
 
   def router() do
     quote do
-      import Spigot.Command.Router
-      import Spigot.Command.RouterMacro
+      import Engine.Command.Router
+      import Engine.Command.RouterMacro
     end
   end
 
@@ -51,7 +51,7 @@ defmodule Spigot do
     quote do
       use GenServer
 
-      import Spigot.Sink
+      import Engine.Sink
     end
   end
 end

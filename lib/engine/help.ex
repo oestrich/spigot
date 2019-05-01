@@ -1,4 +1,4 @@
-defmodule Spigot.Help do
+defmodule Engine.Help do
   @moduledoc """
   Generate help from commands
   """

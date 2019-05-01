@@ -1,16 +1,16 @@
-defmodule Spigot.Sessions.Foreman do
+defmodule Engine.Sessions.Foreman do
   @moduledoc """
   Session Foreman
 
-  The in between process from `Spigot.Telnet.Server` and the rest of
-  the processes. Starts the `Spigot.Sessions.Options` process on boot.
+  The in between process from `Engine.Telnet.Server` and the rest of
+  the processes. Starts the `Engine.Sessions.Options` process on boot.
   """
 
   @behaviour :gen_statem
 
   defstruct [:session, :protocol, :tether, :auth, :character, :commands, :options]
 
-  alias Spigot.Sessions.Session
+  alias Engine.Sessions.Session
 
   @impl true
   def callback_mode(), do: :state_functions

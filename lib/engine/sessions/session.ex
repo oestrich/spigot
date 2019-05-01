@@ -1,4 +1,4 @@
-defmodule Spigot.Sessions.Session do
+defmodule Engine.Sessions.Session do
   @moduledoc """
   Session supervisor
 
@@ -7,12 +7,12 @@ defmodule Spigot.Sessions.Session do
 
   use Supervisor
 
-  alias Spigot.Characters
-  alias Spigot.Sessions.Auth
-  alias Spigot.Sessions.Commands
-  alias Spigot.Sessions.Foreman
-  alias Spigot.Sessions.Options
-  alias Spigot.Sessions.Tether
+  alias Engine.Characters
+  alias Engine.Sessions.Auth
+  alias Engine.Sessions.Commands
+  alias Engine.Sessions.Foreman
+  alias Engine.Sessions.Options
+  alias Engine.Sessions.Tether
 
   def start_link(opts) do
     Supervisor.start_link(__MODULE__, opts)
@@ -63,7 +63,7 @@ defmodule Spigot.Sessions.Session do
   end
 
   def terminate(foreman_state) do
-    DynamicSupervisor.terminate_child(Spigot.Sessions, foreman_state.session)
+    DynamicSupervisor.terminate_child(Engine.Sessions, foreman_state.session)
   end
 
   def init(protocol: protocol) do

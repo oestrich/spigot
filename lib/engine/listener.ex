@@ -1,11 +1,11 @@
-defmodule Spigot.Listener do
+defmodule Engine.Listener do
   @moduledoc """
   Process that starts the `ranch` listener
   """
 
   use GenServer
 
-  alias Spigot.Telnet.Server
+  alias Engine.Telnet.Server
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, [], opts)

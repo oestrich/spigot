@@ -1,4 +1,4 @@
-defmodule Spigot.Grapevine do
+defmodule Engine.Grapevine do
   @moduledoc """
   OAuth helpers for Grapevine
   """

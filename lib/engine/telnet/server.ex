@@ -1,10 +1,10 @@
-defmodule Spigot.Telnet.Server do
+defmodule Engine.Telnet.Server do
   @moduledoc """
   ranch protocol for handling telnet connection
   """
 
-  alias Spigot.Conn.Event
-  alias Spigot.Sessions
+  alias Engine.Conn.Event
+  alias Engine.Sessions
   alias Telnet.Options
 
   @behaviour :ranch_protocol

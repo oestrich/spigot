@@ -1,4 +1,4 @@
-defmodule Spigot.Command.Router do
+defmodule Engine.Command.Router do
   @moduledoc """
   Parse player input and match against known patterns
   """

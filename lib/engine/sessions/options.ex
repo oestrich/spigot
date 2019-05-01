@@ -1,4 +1,4 @@
-defmodule Spigot.Sessions.Options do
+defmodule Engine.Sessions.Options do
   @moduledoc """
   Process to parse telnet options from the client
   """
@@ -7,7 +7,7 @@ defmodule Spigot.Sessions.Options do
 
   require Logger
 
-  alias Spigot.Sessions.Auth.OAuth
+  alias Engine.Sessions.Auth.OAuth
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)

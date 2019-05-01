@@ -7,9 +7,9 @@ defmodule Spigot.Application do
 
   def start(_type, _args) do
     children = [
-      {Spigot.Players, [name: Spigot.Players]},
-      {Spigot.Characters, [name: Spigot.Characters]},
-      {Spigot.Sessions, [name: Spigot.Sessions]}
+      {Engine.Players, [name: Engine.Players]},
+      {Engine.Characters, [name: Engine.Characters]},
+      {Engine.Sessions, [name: Engine.Sessions]}
     ]
 
     children = maybe_add_listener(children)
@@ -21,7 +21,7 @@ defmodule Spigot.Application do
   defp maybe_add_listener(children) do
     case @start_listener do
       true ->
-        [{Spigot.Listener, []} | children]
+        [{Engine.Listener, []} | children]
 
       false ->
         children

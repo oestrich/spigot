@@ -1,4 +1,4 @@
-defmodule Spigot.Players do
+defmodule Engine.Players do
   @moduledoc """
   Registry for keeping track of online players
   """

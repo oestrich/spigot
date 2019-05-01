@@ -1,4 +1,4 @@
-defmodule Spigot.Sessions.Auth.OAuth do
+defmodule Engine.Sessions.Auth.OAuth do
   @moduledoc """
   Struct for triggering OAuth
   """
@@ -6,7 +6,7 @@ defmodule Spigot.Sessions.Auth.OAuth do
   defstruct [:action, :params]
 end
 
-defmodule Spigot.Sessions.Auth do
+defmodule Engine.Sessions.Auth do
   @moduledoc """
   Authorization Process
 
@@ -15,9 +15,9 @@ defmodule Spigot.Sessions.Auth do
 
   use GenServer
 
-  alias Spigot.Sessions.Auth.OAuth
-  alias Spigot.Conn.Event
-  alias Spigot.Grapevine
+  alias Engine.Conn.Event
+  alias Engine.Grapevine
+  alias Engine.Sessions.Auth.OAuth
   alias Spigot.Views.Login
 
   defstruct [:foreman]

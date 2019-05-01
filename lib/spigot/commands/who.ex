@@ -5,7 +5,7 @@ defmodule Spigot.Commands.Who do
 
   use Spigot, :command
 
-  alias Spigot.Players
+  alias Engine.Players
 
   @doc """
   View other players

@@ -1,12 +1,12 @@
-defmodule Spigot.Characters do
+defmodule Engine.Characters do
   @moduledoc """
   Supervisor of sessions
   """
 
   use DynamicSupervisor
 
-  alias Spigot.Characters.Character
-  alias Spigot.Players
+  alias Engine.Players
+  alias Spigot.Sinks.Character
 
   @doc false
   def start_link(opts) do

@@ -1,4 +1,4 @@
-defmodule Spigot.Command.RouterMacro do
+defmodule Engine.Command.RouterMacro do
   @moduledoc """
   Generate the functions required to parse commands from a player
   """
@@ -6,7 +6,7 @@ defmodule Spigot.Command.RouterMacro do
   @doc """
   Macro to generate the receive functions
 
-      scope(Spigot.Sessions.Commands) do
+      scope(Spigot.Commands) do
         module(Help) do
           command("help", :base)
           command("help :topic", :topic)
@@ -39,7 +39,7 @@ defmodule Spigot.Command.RouterMacro do
       end
 
       def parse(text) do
-        Spigot.Command.Router.parse(@patterns, text)
+        Engine.Command.Router.parse(@patterns, text)
       end
     end
   end

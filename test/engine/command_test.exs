@@ -1,7 +1,7 @@
-defmodule Spigot.Command.RouterTest do
+defmodule Engine.Command.RouterTest do
   use ExUnit.Case
 
-  alias Spigot.Command.Router
+  alias Engine.Command.Router
 
   describe "parsing commands" do
     test "finding the matching pattern" do

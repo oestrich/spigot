@@ -11,8 +11,10 @@ defmodule Spigot.Commands.Who do
   View other players
   """
   def base(conn, _params) do
+    players = Enum.map(Players.online(), &List.first/1)
+
     conn
-    |> render("who", %{players: Players.online()})
+    |> render("who", %{players: players})
     |> render(Commands, "prompt")
   end
 end

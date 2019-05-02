@@ -10,7 +10,11 @@ defmodule Engine.Players do
   end
 
   def online() do
-    :ets.match(__MODULE__, {:_, :_, :"$1"})
+    players = :ets.match(__MODULE__, {:_, :"$1", :"$2"})
+
+    Enum.map(players, fn [pid, character] ->
+      {pid, character}
+    end)
   end
 
   def whereis(name) do

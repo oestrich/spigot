@@ -5,6 +5,8 @@ defmodule Spigot.Commands.Say do
 
   use Spigot, :command
 
+  alias Spigot.Actions.Say
+
   @doc """
   Say text to the local room
   """
@@ -12,5 +14,6 @@ defmodule Spigot.Commands.Say do
     conn
     |> render("text", %{text: text})
     |> render(Commands, "prompt")
+    |> event(:character, Say, :broadcast, %{text: text})
   end
 end

@@ -9,6 +9,7 @@ defmodule Spigot.Character do
 
   alias Engine.Players
   alias Spigot.Actions.Combat
+  alias Spigot.Actions.Say
   alias Spigot.Character.Vitals
 
   defstruct [:name]
@@ -16,6 +17,7 @@ defmodule Spigot.Character do
   @timeout 15_000
 
   actions(Combat, [:vitals, :start, :stop, :tick])
+  actions(Say, [:broadcast, :receive])
 
   @doc false
   def start_link(opts) do

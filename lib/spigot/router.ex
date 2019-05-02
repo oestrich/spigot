@@ -17,6 +17,17 @@ defmodule Spigot.Router do
       command("help :topic", :topic)
     end
 
+    module(Look) do
+      command("look", :base)
+    end
+
+    module(Movement) do
+      command("north", :north)
+      command("south", :south)
+      command("east", :east)
+      command("west", :west)
+    end
+
     module(Quit) do
       command("quit", :base)
     end

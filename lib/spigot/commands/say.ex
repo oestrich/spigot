@@ -1,6 +1,6 @@
 defmodule Spigot.Commands.Say do
   @moduledoc """
-  Say a message
+  Local room communication
   """
 
   use Spigot, :command
@@ -8,7 +8,7 @@ defmodule Spigot.Commands.Say do
   alias Spigot.Actions.Say
 
   @doc """
-  Say text to the local room
+  Sends your message to everyone in the current room
   """
   def base(conn, %{"message" => text}) do
     conn

@@ -29,6 +29,7 @@ defmodule Spigot.MixProject do
       {:gossip, "~> 1.3"},
       {:jason, "~> 1.1"},
       {:ranch, "~> 1.7"},
+      {:telemetry, "~> 0.3.0"},
       {:telnet, git: "https://github.com/oestrich/telnet-elixir.git"}
     ]
   end

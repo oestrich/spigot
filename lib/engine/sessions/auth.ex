@@ -74,6 +74,7 @@ defmodule Engine.Sessions.Auth do
         redirect_uri: "urn:ietf:wg:oauth:2.0:oob"
       }
     }
+
     send(state.foreman, {:send, event})
   end
 

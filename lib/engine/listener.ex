@@ -67,6 +67,7 @@ defmodule Engine.Listener do
 
   defp set_listener(state, listener) do
     state = Map.put(state, :listener, listener)
+
     case Application.get_env(:spigot, :listener)[:tls] do
       true ->
         {:noreply, state, {:continue, :listen_tls}}

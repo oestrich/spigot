@@ -94,4 +94,3 @@ defmodule Engine.Sessions.Options do
 
   defp process_option(state, _option), do: {:noreply, state}
 end
-

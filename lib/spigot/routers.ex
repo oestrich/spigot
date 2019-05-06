@@ -5,11 +5,15 @@ defmodule Spigot.Routers do
 
   @routers [
     Spigot.Core.Router,
-    Spigot.Grapevine.Router,
+    Spigot.Grapevine.Router
   ]
 
+  @doc false
   def routers(), do: @routers
 
+  @doc """
+  Take a conn and execute a command if found
+  """
   def call(conn, command_text) do
     case parse(command_text) do
       {:error, :unknown} ->
@@ -21,6 +25,9 @@ defmodule Spigot.Routers do
     end
   end
 
+  @doc """
+  Parse through routers to find a matching command
+  """
   def parse(command_text) do
     value =
       Enum.find_value(routers(), fn router ->

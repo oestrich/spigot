@@ -21,7 +21,10 @@ defmodule Engine.Grapevine do
       redirect_uri: "urn:ietf:wg:oauth:2.0:oob"
     }
 
-    response = HTTPoison.post(host() <> "oauth/token", Jason.encode!(params), [{"Content-Type", "application/json"}])
+    response =
+      HTTPoison.post(host() <> "oauth/token", Jason.encode!(params), [
+        {"Content-Type", "application/json"}
+      ])
 
     case response do
       {:ok, %{status_code: 200, body: body}} ->

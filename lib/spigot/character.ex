@@ -1,3 +1,19 @@
+defmodule Spigot.Character.Vitals do
+  @moduledoc """
+  Struct for character vitals such as health
+  """
+
+  @derive Jason.Encoder
+  defstruct [
+    :health_points,
+    :max_health_points,
+    :skill_points,
+    :max_skill_points,
+    :endurance_points,
+    :max_endurance_points
+  ]
+end
+
 defmodule Spigot.Character do
   @moduledoc """
   Session Character
@@ -46,7 +62,7 @@ defmodule Spigot.Character do
       foreman: opts[:foreman],
       combat: false,
       character: %__MODULE__{
-        name: opts[:name],
+        name: opts[:name]
       },
       vitals: %Vitals{
         health_points: 40,
@@ -54,7 +70,7 @@ defmodule Spigot.Character do
         skill_points: 35,
         max_skill_points: 55,
         endurance_points: 45,
-        max_endurance_points: 55,
+        max_endurance_points: 55
       }
     }
 

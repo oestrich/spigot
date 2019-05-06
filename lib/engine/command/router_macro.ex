@@ -32,7 +32,7 @@ defmodule Engine.Command.RouterMacro do
         Engine.Command.Router.parse(@patterns, text)
       end
 
-      defoverridable [parse: 1, receive: 2]
+      defoverridable parse: 1, receive: 2
     end
   end
 

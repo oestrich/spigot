@@ -7,7 +7,7 @@ defmodule Engine.Sink do
     Enum.map(actions, fn action ->
       quote do
         def handle_info(action = %unquote(module){action: unquote(action)}, state) do
-          process_action(state, action, &unquote(module).unquote(action)/2)
+          process_action(state, action, &(unquote(module).unquote(action) / 2))
         end
       end
     end)

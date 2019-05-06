@@ -3,7 +3,7 @@ defmodule Engine.Command.Router do
   Parse player input and match against known patterns
   """
 
-  @callback parse(String.t()) :: {:ok, {String.t, map()}} | {:error, :unknown}
+  @callback parse(String.t()) :: {:ok, {String.t(), map()}} | {:error, :unknown}
 
   @callback commands() :: [String.t()]
 

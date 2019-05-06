@@ -9,7 +9,15 @@ defmodule Engine.Conn do
   Struct for tracking data being processed in a command or action
   """
 
-  defstruct [:foreman, :character, :params, :assigns, messages: [], private: %Engine.Conn.Private{}, lines: []]
+  defstruct [
+    :foreman,
+    :character,
+    :params,
+    :assigns,
+    messages: [],
+    private: %Engine.Conn.Private{},
+    lines: []
+  ]
 end
 
 defmodule Engine.Conn.Event do

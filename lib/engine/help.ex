@@ -66,7 +66,7 @@ defmodule Engine.Help do
   end
 
   def fetch_doc({command, path, function}) do
-    case Code.fetch_docs(command) do     
+    case Code.fetch_docs(command) do
       {:docs_v1, 2, :elixir, "text/markdown", _, _, functions} ->
         {path, fetch_function_doc(function, functions)}
 

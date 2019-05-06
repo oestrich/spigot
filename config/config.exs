@@ -10,6 +10,8 @@ config :spigot, :listener,
 
 config :logger, level: :debug
 
+config :gossip, :callback_modules, core: Engine.Gossip
+
 if File.exists?("config/#{Mix.env()}.exs") do
   import_config "#{Mix.env()}.exs"
 end

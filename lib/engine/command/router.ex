@@ -3,6 +3,12 @@ defmodule Engine.Command.Router do
   Parse player input and match against known patterns
   """
 
+  @callback parse(String.t()) :: {:ok, {String.t, map()}} | {:error, :unknown}
+
+  @callback commands() :: [String.t()]
+
+  @callback receive(String.t(), map()) :: map()
+
   def parse(patterns, text) do
     text = String.trim(text)
 
@@ -44,5 +50,10 @@ defmodule Engine.Command.Router do
     pattern
     |> Regex.compile!()
     |> Regex.named_captures(text)
+  end
+
+  def setup_private_conn(conn, module) do
+    private = Map.put(conn.private, :view, module.view())
+    Map.put(conn, :private, private)
   end
 end

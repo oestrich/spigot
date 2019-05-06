@@ -26,6 +26,7 @@ defmodule Spigot.MixProject do
       {:distillery, "~> 2.0"},
       {:elixir_uuid, "~> 1.2"},
       {:httpoison, "~> 1.5"},
+      {:gossip, "~> 1.3"},
       {:jason, "~> 1.1"},
       {:ranch, "~> 1.7"},
       {:telnet, git: "https://github.com/oestrich/telnet-elixir.git"}

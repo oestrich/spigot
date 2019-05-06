@@ -1,4 +1,4 @@
-defmodule Spigot.Router do
+defmodule Spigot.Routers.CoreRouter do
   use Spigot, :router
 
   scope(Spigot.Commands) do

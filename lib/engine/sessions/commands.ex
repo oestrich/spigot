@@ -6,7 +6,7 @@ defmodule Engine.Sessions.Commands do
   use GenServer
 
   alias Spigot.Actions.Combat
-  alias Spigot.Router
+  alias Spigot.Routers
   alias Spigot.Views.Commands
   alias Spigot.Views.Login
 
@@ -46,7 +46,7 @@ defmodule Engine.Sessions.Commands do
       assigns: %{}
     }
 
-    case Router.call(conn, command_text) do
+    case Routers.call(conn, command_text) do
       {:error, :unknown} ->
         send(state.foreman, {:send, Commands.render("unknown", %{})})
         send(state.foreman, {:send, Commands.render("prompt", %{})})

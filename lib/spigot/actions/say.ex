@@ -12,7 +12,7 @@ defmodule Spigot.Actions.Say do
   alias Spigot.Views
 
   def broadcast(state, %{text: text}) do
-    Enum.map(Players.online(), fn {pid, _} ->
+    Enum.each(Players.online(), fn {pid, _} ->
       send(pid, %Actions.Say{action: :receive, params: %{name: state.character.name, text: text}})
     end)
 

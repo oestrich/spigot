@@ -5,7 +5,7 @@ defmodule Spigot.Core.WhoView do
     ~E"""
     Other players online:
     <%= Enum.map(players, fn player -> %>
-      - <%= IO.ANSI.white() %><%= player.name %><%= IO.ANSI.reset() %>
+      - <%= IO.ANSI.yellow() %><%= player.name %><%= IO.ANSI.reset() %>
     <% end) %>
     """
   end

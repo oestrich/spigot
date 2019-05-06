@@ -24,5 +24,15 @@ defmodule Engine.Gossip do
   def authenticated(), do: :ok
 
   @impl true
-  def message_broadcast(_message), do: :ok
+  def message_broadcast(message) do
+    params = %{
+      channel: message.channel,
+      name: "#{message.name}@#{message.game}",
+      text: message.message
+    }
+
+    Enum.each(Players.online(), fn {pid, _} ->
+      send(pid, %Spigot.Grapevine.ChatAction{action: :receive, params: params})
+    end)
+  end
 end

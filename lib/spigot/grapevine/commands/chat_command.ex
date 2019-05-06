@@ -5,7 +5,7 @@ defmodule Spigot.Grapevine.ChatCommand do
 
   use Spigot, :command
 
-  alias Spigot.Core.SayAction
+  alias Spigot.Grapevine.ChatAction
 
   @doc """
   Sends your message to everyone in the current room
@@ -14,6 +14,6 @@ defmodule Spigot.Grapevine.ChatCommand do
     conn
     |> render("text", %{channel: channel, text: text})
     |> render(CommandsView, "prompt")
-    |> event(:character, SayAction, :broadcast, %{channel: channel, text: text})
+    |> event(:character, ChatAction, :broadcast, %{channel: channel, text: text})
   end
 end

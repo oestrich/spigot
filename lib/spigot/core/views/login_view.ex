@@ -1,4 +1,4 @@
-defmodule Spigot.Views.Login do
+defmodule Spigot.Core.LoginView do
   use Spigot, :view
 
   def render("logged-in", %{username: username}) do

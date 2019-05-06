@@ -1,4 +1,4 @@
-defmodule Spigot.Commands.Look do
+defmodule Spigot.Core.LookCommand do
   @moduledoc """
   Look at your surroundings
   """
@@ -11,6 +11,6 @@ defmodule Spigot.Commands.Look do
   def base(conn, _params) do
     conn
     |> render("base")
-    |> render(Commands, "prompt")
+    |> render(CommandsView, "prompt")
   end
 end

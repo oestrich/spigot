@@ -1,4 +1,4 @@
-defmodule Spigot.Views.Combat do
+defmodule Spigot.Core.CombatView do
   use Spigot, :view
 
   def render("start", _assigns) do

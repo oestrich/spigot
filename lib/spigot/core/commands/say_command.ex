@@ -1,11 +1,11 @@
-defmodule Spigot.Commands.Say do
+defmodule Spigot.Core.SayCommand do
   @moduledoc """
   Local room communication
   """
 
   use Spigot, :command
 
-  alias Spigot.Actions.Say
+  alias Spigot.Core.SayAction
 
   @doc """
   Sends your message to everyone in the current room
@@ -13,7 +13,7 @@ defmodule Spigot.Commands.Say do
   def base(conn, %{"message" => text}) do
     conn
     |> render("text", %{text: text})
-    |> render(Commands, "prompt")
-    |> event(:character, Say, :broadcast, %{text: text})
+    |> render(CommandsView, "prompt")
+    |> event(:character, SayAction, :broadcast, %{text: text})
   end
 end

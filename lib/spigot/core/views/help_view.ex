@@ -1,4 +1,4 @@
-defmodule Spigot.Views.Help do
+defmodule Spigot.Core.HelpView do
   use Spigot, :view
 
   def render("base", %{topics: topics}) do

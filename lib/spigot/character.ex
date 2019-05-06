@@ -8,16 +8,16 @@ defmodule Spigot.Character do
   use Spigot, :sink
 
   alias Engine.Players
-  alias Spigot.Actions.Combat
-  alias Spigot.Actions.Say
+  alias Spigot.Core.CombatAction
+  alias Spigot.Core.SayAction
   alias Spigot.Character.Vitals
 
   defstruct [:name]
 
   @timeout 15_000
 
-  actions(Combat, [:vitals, :start, :stop, :tick])
-  actions(Say, [:broadcast, :receive])
+  actions(CombatAction, [:vitals, :start, :stop, :tick])
+  actions(SayAction, [:broadcast, :receive])
 
   @doc false
   def start_link(opts) do

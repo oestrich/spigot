@@ -1,7 +1,7 @@
-defmodule Spigot.Views.Look do
+defmodule Spigot.Core.MovementView do
   use Spigot, :view
 
   def render("base", _assigns) do
-    "You are in a void.\n"
+    "No such exit.\n"
   end
 end

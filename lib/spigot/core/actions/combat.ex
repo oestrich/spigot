@@ -1,4 +1,4 @@
-defmodule Spigot.Actions.Combat do
+defmodule Spigot.Core.CombatAction do
   @moduledoc """
   Combat
 
@@ -8,13 +8,13 @@ defmodule Spigot.Actions.Combat do
 
   use Spigot, :action
 
-  alias Spigot.Views.Combat
-  alias Spigot.Views.Vitals
+  alias Spigot.Core.CombatView
+  alias Spigot.Core.VitalsView
 
   @delay 1000
 
   def vitals(state, _params) do
-    render(state, Vitals, "vitals", state)
+    render(state, VitalsView, "vitals", state)
   end
 
   def start(state, params) do
@@ -33,7 +33,7 @@ defmodule Spigot.Actions.Combat do
 
     state
     |> vitals(params)
-    |> render(Combat, "tick", state)
+    |> render(CombatView, "tick", state)
   end
 
   def tick(state, _params), do: state

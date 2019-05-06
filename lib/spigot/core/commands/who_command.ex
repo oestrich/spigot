@@ -1,4 +1,4 @@
-defmodule Spigot.Commands.Who do
+defmodule Spigot.Core.WhoCommand do
   @moduledoc """
   View other players in the game
   """
@@ -18,6 +18,6 @@ defmodule Spigot.Commands.Who do
 
     conn
     |> render("who", %{players: players})
-    |> render(Commands, "prompt")
+    |> render(CommandsView, "prompt")
   end
 end

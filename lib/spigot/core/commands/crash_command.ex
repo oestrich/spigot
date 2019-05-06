@@ -1,4 +1,4 @@
-defmodule Spigot.Commands.Crash do
+defmodule Spigot.Core.CrashCommand do
   @moduledoc """
   Crash the commands process
   """

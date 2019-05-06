@@ -26,7 +26,7 @@ defmodule Spigot do
       import Engine.Command
 
       # For the prompt
-      alias Spigot.Views.Commands
+      alias Spigot.Core.CommandsView
 
       def view(), do: @view
     end

@@ -1,4 +1,4 @@
-defmodule Spigot.Commands.Help do
+defmodule Spigot.Core.HelpCommand do
   @moduledoc """
   View help
   """
@@ -13,7 +13,7 @@ defmodule Spigot.Commands.Help do
   def base(conn, _params) do
     conn
     |> render("base", %{topics: Help.topics()})
-    |> render(Commands, "prompt")
+    |> render(CommandsView, "prompt")
   end
 
   @doc """
@@ -24,12 +24,12 @@ defmodule Spigot.Commands.Help do
       conn
       |> render("topic.text", help)
       |> render("topic.modal", help)
-      |> render(Commands, "prompt")
+      |> render(CommandsView, "prompt")
     else
       {:error, :not_found} ->
         conn
         |> render("unknown")
-        |> render(Commands, "prompt")
+        |> render(CommandsView, "prompt")
     end
   end
 end

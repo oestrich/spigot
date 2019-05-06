@@ -1,4 +1,4 @@
-defmodule Spigot.Views.Say do
+defmodule Spigot.Core.SayView do
   use Spigot, :view
 
   def render("text", %{name: name, text: text}) do

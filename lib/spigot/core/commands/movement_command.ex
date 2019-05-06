@@ -1,4 +1,4 @@
-defmodule Spigot.Commands.Movement do
+defmodule Spigot.Core.MovementCommand do
   @moduledoc """
   Look at your surroundings
   """
@@ -11,7 +11,7 @@ defmodule Spigot.Commands.Movement do
   def north(conn, _params) do
     conn
     |> render("base")
-    |> render(Commands, "prompt")
+    |> render(CommandsView, "prompt")
   end
 
   @doc """
@@ -20,7 +20,7 @@ defmodule Spigot.Commands.Movement do
   def south(conn, _params) do
     conn
     |> render("base")
-    |> render(Commands, "prompt")
+    |> render(CommandsView, "prompt")
   end
 
   @doc """
@@ -29,7 +29,7 @@ defmodule Spigot.Commands.Movement do
   def east(conn, _params) do
     conn
     |> render("base")
-    |> render(Commands, "prompt")
+    |> render(CommandsView, "prompt")
   end
 
   @doc """
@@ -38,6 +38,6 @@ defmodule Spigot.Commands.Movement do
   def west(conn, _params) do
     conn
     |> render("base")
-    |> render(Commands, "prompt")
+    |> render(CommandsView, "prompt")
   end
 end

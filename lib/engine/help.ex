@@ -3,7 +3,7 @@ defmodule Engine.Help do
   Generate help from commands
   """
 
-  alias Spigot.Router
+  alias Spigot.Core.Router
 
   defstruct [:topic, :docs, :commands]
 

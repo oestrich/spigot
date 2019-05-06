@@ -20,27 +20,19 @@ defmodule Engine.Command.RouterMacro do
 
       unquote(parse_modules(module, opts[:do]))
 
-      def call(conn, command_text) do
-        case parse(command_text) do
-          {:ok, {pattern, params}} ->
-            conn = Map.put(conn, :params, params)
-            receive(pattern, conn)
+      @behaviour Engine.Command.Router
 
-          {:error, :unknown} ->
-            {:error, :unknown}
-        end
-      end
-
-      @doc """
-      All known commands
-      """
+      @impl true
       def commands() do
         Enum.sort(@commands)
       end
 
+      @impl true
       def parse(text) do
         Engine.Command.Router.parse(@patterns, text)
       end
+
+      defoverridable [parse: 1, receive: 2]
     end
   end
 
@@ -48,6 +40,10 @@ defmodule Engine.Command.RouterMacro do
     Enum.map(modules, fn module ->
       parse_module(top_module, module)
     end)
+  end
+
+  def parse_modules({:__aliases__, _, top_module}, {:module, opts, args}) do
+    parse_module(top_module, {:module, opts, args})
   end
 
   def parse_module(top_module, {:module, _, args}) do
@@ -78,9 +74,9 @@ defmodule Engine.Command.RouterMacro do
       @patterns unquote(pattern)
       @commands {unquote(module), unquote(pattern), unquote(fun)}
 
+      @impl true
       def receive(unquote(pattern), conn) do
-        private = Map.put(conn.private, :view, unquote(module).view())
-        conn = Map.put(conn, :private, private)
+        conn = Engine.Command.Router.setup_private_conn(conn, unquote(module))
         unquote(module).unquote(fun)(conn, conn.params)
       end
     end

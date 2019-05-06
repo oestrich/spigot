@@ -18,7 +18,7 @@ defmodule Engine.Sessions.Auth do
   alias Engine.Conn.Event
   alias Engine.Grapevine
   alias Engine.Sessions.Auth.OAuth
-  alias Spigot.Views.Login
+  alias Spigot.Core.LoginView
 
   defstruct [:foreman]
 
@@ -34,7 +34,7 @@ defmodule Engine.Sessions.Auth do
 
   @impl true
   def handle_info(:welcome, state) do
-    send(state.foreman, {:send, Login.render("welcome", %{})})
+    send(state.foreman, {:send, LoginView.render("welcome", %{})})
     {:noreply, state}
   end
 

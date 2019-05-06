@@ -5,10 +5,10 @@ defmodule Engine.Sessions.Commands do
 
   use GenServer
 
-  alias Spigot.Actions.Combat
+  alias Spigot.Core.CombatAction
+  alias Spigot.Core.CommandsView
+  alias Spigot.Core.LoginView
   alias Spigot.Routers
-  alias Spigot.Views.Commands
-  alias Spigot.Views.Login
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)
@@ -24,9 +24,9 @@ defmodule Engine.Sessions.Commands do
   end
 
   def handle_info({:welcome, username}, state) do
-    send(state.foreman, {:send, Login.render("logged-in", %{username: username})})
-    send(state.foreman, {:send, Commands.render("prompt", state)})
-    send(state.character, %Combat{action: :vitals, params: %{}})
+    send(state.foreman, {:send, LoginView.render("logged-in", %{username: username})})
+    send(state.foreman, {:send, CommandsView.render("prompt", state)})
+    send(state.character, %CombatAction{action: :vitals, params: %{}})
 
     {:noreply, state}
   end
@@ -48,8 +48,8 @@ defmodule Engine.Sessions.Commands do
 
     case Routers.call(conn, command_text) do
       {:error, :unknown} ->
-        send(state.foreman, {:send, Commands.render("unknown", %{})})
-        send(state.foreman, {:send, Commands.render("prompt", %{})})
+        send(state.foreman, {:send, CommandsView.render("unknown", %{})})
+        send(state.foreman, {:send, CommandsView.render("prompt", %{})})
         {:noreply, state}
 
       conn ->

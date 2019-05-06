@@ -1,46 +1,46 @@
-defmodule Spigot.Routers.CoreRouter do
+defmodule Spigot.Core.Router do
   use Spigot, :router
 
-  scope(Spigot.Commands) do
-    module(Combat) do
+  scope(Spigot.Core) do
+    module(CombatCommand) do
       command("combat start", :start)
       command("combat stop", :stop)
       command("combat tick", :tick)
     end
 
-    module(Crash) do
+    module(CrashCommand) do
       command("crash", :base)
     end
 
-    module(Help) do
+    module(HelpCommand) do
       command("help", :base)
       command("help :topic", :topic)
     end
 
-    module(Look) do
+    module(LookCommand) do
       command("look", :base)
     end
 
-    module(Movement) do
+    module(MovementCommand) do
       command("north", :north)
       command("south", :south)
       command("east", :east)
       command("west", :west)
     end
 
-    module(Quit) do
+    module(QuitCommand) do
       command("quit", :base)
     end
 
-    module(Say) do
+    module(SayCommand) do
       command("say :message", :base)
     end
 
-    module(Vitals) do
+    module(VitalsCommand) do
       command("vitals", :base)
     end
 
-    module(Who) do
+    module(WhoCommand) do
       command("who", :base)
     end
   end

@@ -4,8 +4,7 @@ defmodule Engine.View do
   """
 
   def view_module(module) do
-    base_module = List.last(String.split(to_string(module), "."))
-    String.to_atom(Enum.join(["Elixir", "Spigot", "Views", base_module], "."))
+    String.to_atom(String.replace(to_string(module), "Command", "View"))
   end
 end
 

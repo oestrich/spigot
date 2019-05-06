@@ -1,4 +1,4 @@
-defmodule Spigot.Commands.Quit do
+defmodule Spigot.Core.QuitCommand do
   @moduledoc """
   Terminate your session
   """

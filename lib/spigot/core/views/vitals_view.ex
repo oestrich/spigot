@@ -1,4 +1,4 @@
-defmodule Spigot.Views.Vitals do
+defmodule Spigot.Core.VitalsView do
   use Spigot, :view
 
   def render("vitals", %{vitals: vitals}) do

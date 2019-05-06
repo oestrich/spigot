@@ -1,4 +1,4 @@
-defmodule Spigot.Views.Grapevine do
+defmodule Spigot.Grapevine.ChatView do
   use Spigot, :view
 
   def render("text", %{name: name, text: text}) do

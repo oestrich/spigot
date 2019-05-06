@@ -1,4 +1,4 @@
-defmodule Spigot.Actions.Say do
+defmodule Spigot.Core.SayAction do
   @moduledoc """
   Say
 
@@ -8,12 +8,11 @@ defmodule Spigot.Actions.Say do
   use Spigot, :action
 
   alias Engine.Players
-  alias Spigot.Actions
-  alias Spigot.Views
+  alias Spigot.Core.SayView
 
   def broadcast(state, %{text: text}) do
     Enum.each(Players.online(), fn {pid, _} ->
-      send(pid, %Actions.Say{action: :receive, params: %{name: state.character.name, text: text}})
+      send(pid, %__MODULE__{action: :receive, params: %{name: state.character.name, text: text}})
     end)
 
     state
@@ -24,6 +23,6 @@ defmodule Spigot.Actions.Say do
   end
 
   def receive(state, %{name: name, text: text}) do
-    render(state, Views.Say, "text", %{name: name, text: text})
+    render(state, SayView, "text", %{name: name, text: text})
   end
 end

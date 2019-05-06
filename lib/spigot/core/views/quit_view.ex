@@ -1,4 +1,4 @@
-defmodule Spigot.Views.Quit do
+defmodule Spigot.Core.QuitView do
   use Spigot, :view
 
   def render("goodbye", _assigns) do

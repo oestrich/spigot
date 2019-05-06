@@ -1,11 +1,11 @@
-defmodule Spigot.Commands.Vitals do
+defmodule Spigot.Core.VitalsCommand do
   @moduledoc """
   Re-send your vitals
   """
 
   use Spigot, :command
 
-  alias Spigot.Actions.Combat
+  alias Spigot.Core.CombatAction
 
   @doc """
   Send a vitals GMCP message
@@ -13,7 +13,7 @@ defmodule Spigot.Commands.Vitals do
   def base(conn, _params) do
     conn
     |> push("Sending vitals...\n")
-    |> render(Commands, "prompt")
-    |> event(:character, Combat, :vitals)
+    |> render(CommandsView, "prompt")
+    |> event(:character, CombatAction, :vitals)
   end
 end

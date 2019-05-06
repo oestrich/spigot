@@ -1,4 +1,4 @@
-defmodule Spigot.Views.Who do
+defmodule Spigot.Core.WhoView do
   use Spigot, :view
 
   def render("who", %{players: players}) do

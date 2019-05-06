@@ -4,8 +4,8 @@ defmodule Spigot.Routers do
   """
 
   @routers [
-    Spigot.Routers.CoreRouter,
-    Spigot.Routers.GrapevineRouter,
+    Spigot.Core.Router,
+    Spigot.Grapevine.Router,
   ]
 
   def routers(), do: @routers

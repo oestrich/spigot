@@ -1,9 +1,9 @@
-defmodule Spigot.Routers.GrapevineRouter do
+defmodule Spigot.Grapevine.Router do
   use Spigot, :router
 
   alias Engine.Command.Router
   alias Engine.Gossip
-  alias Spigot.Commands.Grapevine
+  alias Spigot.Grapevine.ChatCommand
 
   @behaviour Engine.Command.Router
 
@@ -28,8 +28,8 @@ defmodule Spigot.Routers.GrapevineRouter do
       end)
 
     params = Map.put(conn.params, "channel", channel)
-    conn = Router.setup_private_conn(conn, Grapevine)
+    conn = Router.setup_private_conn(conn, ChatCommand)
 
-    Spigot.Commands.Grapevine.base(conn, params)
+    ChatCommand.base(conn, params)
   end
 end

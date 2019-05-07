@@ -29,7 +29,7 @@ defmodule Engine.Telnet.Server do
       transport: transport,
       buffer: <<>>,
       options: %{
-        space: false
+        newline: false
       }
     }
 
@@ -108,7 +108,7 @@ defmodule Engine.Telnet.Server do
   end
 
   defp push(state, data) when is_binary(data) do
-    case state.options.space do
+    case state.options.newline do
       true ->
         state.transport.send(state.socket, "\n" <> data)
 
@@ -118,7 +118,7 @@ defmodule Engine.Telnet.Server do
 
     state.transport.send(state.socket, <<255, 249>>)
 
-    %{state | options: %{state.options | space: String.last(data) == " "}}
+    update_newline(state, String.last(data) == " ")
   end
 
   defp process_data(state, data) do
@@ -131,6 +131,10 @@ defmodule Engine.Telnet.Server do
 
     send(state.foreman, {:recv, :text, string})
 
-    {:noreply, state}
+    {:noreply, update_newline(state, String.length(string) == 0)}
+  end
+
+  defp update_newline(state, status) do
+    %{state | options: %{state.options | newline: status}}
   end
 end

@@ -8,7 +8,7 @@ config :spigot, :listener,
   start: true,
   tls: true
 
-config :logger, level: :debug
+config :logger, level: :info
 
 config :gossip, :callback_modules, core: Engine.Gossip
 

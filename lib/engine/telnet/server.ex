@@ -27,7 +27,10 @@ defmodule Engine.Telnet.Server do
     state = %{
       socket: socket,
       transport: transport,
-      buffer: <<>>
+      buffer: <<>>,
+      options: %{
+        space: false
+      }
     }
 
     :gen_server.enter_loop(__MODULE__, [], state)
@@ -66,7 +69,7 @@ defmodule Engine.Telnet.Server do
   end
 
   def handle_info({:send, data}, state) do
-    push(state, data)
+    state = push(state, data)
     {:noreply, state}
   end
 
@@ -79,7 +82,7 @@ defmodule Engine.Telnet.Server do
   end
 
   defp push(state, data_list) when is_list(data_list) do
-    Enum.each(data_list, fn data ->
+    Enum.reduce(data_list, state, fn data, state ->
       push(state, data)
     end)
   end
@@ -91,6 +94,7 @@ defmodule Engine.Telnet.Server do
     data = data <> <<255, 240>>
 
     state.transport.send(state.socket, data)
+    state
   end
 
   defp push(state, output = %Event{type: :oauth}) do
@@ -100,11 +104,21 @@ defmodule Engine.Telnet.Server do
     data = data <> <<255, 240>>
 
     state.transport.send(state.socket, data)
+    state
   end
 
   defp push(state, data) when is_binary(data) do
-    state.transport.send(state.socket, data)
+    case state.options.space do
+      true ->
+        state.transport.send(state.socket, "\n" <> data)
+
+      false ->
+        state.transport.send(state.socket, data)
+    end
+
     state.transport.send(state.socket, <<255, 249>>)
+
+    %{state | options: %{state.options | space: String.last(data) == " "}}
   end
 
   defp process_data(state, data) do

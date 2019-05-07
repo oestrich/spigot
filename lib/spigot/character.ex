@@ -60,6 +60,7 @@ defmodule Spigot.Character do
   def init(opts) do
     state = %{
       foreman: opts[:foreman],
+      lines: [],
       combat: false,
       character: %__MODULE__{
         name: opts[:name]

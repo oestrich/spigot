@@ -4,8 +4,7 @@ defmodule Engine.Action do
   """
 
   def push(state, lines) do
-    send(state.foreman, {:send, lines})
-    state
+    Map.put(state, :lines, state.lines ++ List.wrap(lines))
   end
 
   def render(state, view, template, assigns) do

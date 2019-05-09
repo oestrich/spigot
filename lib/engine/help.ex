@@ -17,6 +17,7 @@ defmodule Engine.Help do
       |> to_string()
       |> String.split(".")
       |> List.last()
+      |> String.replace(~r/command/i, "")
     end)
     |> Enum.uniq()
   end
@@ -32,6 +33,7 @@ defmodule Engine.Help do
           |> to_string()
           |> String.split(".")
           |> List.last()
+          |> String.replace(~r/command/i, "")
 
         String.downcase(topic) == String.downcase(command)
       end)

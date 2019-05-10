@@ -9,13 +9,19 @@ defmodule Spigot.Grapevine.Router do
 
   @impl true
   def parse(text) do
-    Engine.Command.Router.parse(commands(), text)
+    Engine.Command.Router.parse(routes(), text)
+  end
+
+  defp routes() do
+    Enum.map(Gossip.channels(), fn channel ->
+      "#{channel} :message"
+    end)
   end
 
   @impl true
   def commands() do
-    Enum.map(Gossip.channels(), fn channel ->
-      "#{channel} :message"
+    Enum.map(routes(), fn route ->
+      {ChatCommand, route, :base}
     end)
   end
 

@@ -55,7 +55,7 @@ defmodule Engine.Help do
 
   defp commands() do
     Routers.routers()
-    |> Enum.map(&(&1.commands()))
+    |> Enum.map(& &1.commands())
     |> List.flatten()
     |> Enum.sort_by(fn {command, _path, _fun} ->
       List.last(String.split(to_string(command), "."))

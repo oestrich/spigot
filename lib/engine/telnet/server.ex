@@ -78,6 +78,8 @@ defmodule Engine.Telnet.Server do
     state.transport.send(state.socket, <<255, 251, 201>>)
     # DO OAuth
     state.transport.send(state.socket, <<255, 253, 165>>)
+    # DO NEW-ENVIRON
+    state.transport.send(state.socket, <<255, 253, 39>>)
     {:noreply, state}
   end
 

@@ -17,6 +17,7 @@ defmodule Engine.Sessions.Options do
     state = %{
       foreman: opts[:foreman],
       auth: opts[:auth],
+      new_environ: false,
       oauth: false,
       gmcp: false
     }
@@ -66,6 +67,12 @@ defmodule Engine.Sessions.Options do
     {:noreply, state}
   end
 
+  defp process_option(state, {:will, :new_environ}) do
+    send(state.foreman, {:send, <<255, 250, 39, 1, 0>> <> "IPADDRESS" <> <<255, 240>>})
+    state = Map.put(state, :new_environ, true)
+    {:noreply, state}
+  end
+
   defp process_option(state, {:will, byte}) do
     Logger.debug(fn ->
       "Trying to WILL #{byte}"
@@ -89,6 +96,11 @@ defmodule Engine.Sessions.Options do
 
   defp process_option(state, {:oauth, "AuthorizationGrant", params}) do
     send(state.auth, %OAuth{action: :authorization_grant, params: params})
+    {:noreply, state}
+  end
+
+  defp process_option(state, {:new_environ, :is, values}) do
+    Logger.info("New environ is: #{inspect(values)}")
     {:noreply, state}
   end
 

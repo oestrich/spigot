@@ -8,7 +8,7 @@ defmodule Spigot.Core.HelpView do
       end)
 
     ~E"""
-    Commands available:
+    Topics available:
 
     <%= topics %>
     """

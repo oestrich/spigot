@@ -23,19 +23,14 @@ defmodule Spigot.Character do
 
   use Spigot, :sink
 
+  use_bottles([Spigot.Core, Spigot.Grapevine])
+
   alias Engine.Players
-  alias Spigot.Core.CombatAction
-  alias Spigot.Core.SayAction
   alias Spigot.Character.Vitals
-  alias Spigot.Grapevine.ChatAction
 
   defstruct [:name]
 
   @timeout 15_000
-
-  actions(CombatAction, [:vitals, :start, :stop, :tick])
-  actions(ChatAction, [:broadcast, :receive])
-  actions(SayAction, [:broadcast, :receive])
 
   @doc false
   def start_link(opts) do

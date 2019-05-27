@@ -7,6 +7,11 @@ defmodule Spigot do
     apply(__MODULE__, which, [])
   end
 
+  defmacro __using__(opts) do
+    which = opts[:type]
+    apply(__MODULE__, which, [opts])
+  end
+
   def action() do
     quote do
       @view Engine.View.view_module(__MODULE__)
@@ -16,6 +21,12 @@ defmodule Spigot do
       defstruct [:action, :params]
 
       def view(), do: @view
+    end
+  end
+
+  def bottle() do
+    quote do
+      @behaviour Engine.Bottle
     end
   end
 

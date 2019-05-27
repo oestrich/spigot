@@ -5,6 +5,21 @@ defmodule Engine.Sink do
 
   alias Spigot.Core.CommandsView
 
+  defmacro use_bottles(bottles) do
+    bottles
+    |> Enum.map(fn bottle ->
+      {:__aliases__, meta, aliases} = bottle
+      Macro.expand({:__aliases__, meta, aliases ++ [:Bottle]}, __CALLER__)
+    end)
+    |> Enum.map(& &1.actions)
+    |> List.flatten()
+    |> Enum.map(fn {module, actions} ->
+      quote do
+        actions(unquote(module), unquote(actions))
+      end
+    end)
+  end
+
   defmacro actions(module, actions) do
     Enum.map(actions, fn action ->
       quote do

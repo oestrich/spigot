@@ -23,6 +23,7 @@ erl_crash.dump
 spigot-*.tar
 
 *.sh
+!docker.sh
 
 /tmp/
 

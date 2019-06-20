@@ -5,6 +5,8 @@ defmodule Engine.Listener do
 
   use GenServer
 
+  require Logger
+
   alias Engine.Telnet.Server
 
   def start_link(opts) do
@@ -66,6 +68,8 @@ defmodule Engine.Listener do
   end
 
   defp set_listener(state, listener) do
+    Logger.info("Telnet Listener Started")
+
     state = Map.put(state, :listener, listener)
 
     case Application.get_env(:spigot, :listener)[:tls] do
@@ -78,6 +82,7 @@ defmodule Engine.Listener do
   end
 
   defp set_tls_listener(state, listener) do
+    Logger.info("TLS Listener Started")
     state = Map.put(state, :tls_listener, listener)
     {:noreply, state}
   end

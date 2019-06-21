@@ -23,7 +23,7 @@ ENV LANG=C.UTF-8
 RUN apk add -U bash openssl
 WORKDIR /app
 COPY --from=releaser /app/_build/prod/rel/spigot /app/
-COPY config/prod.docker.exs /etc/spigot.config.exs
+COPY config/prod.docker.exs /etc/spigot/config.exs
 EXPOSE 4444
 ENTRYPOINT ["bin/spigot"]
 CMD ["foreground"]

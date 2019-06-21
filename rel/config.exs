@@ -33,7 +33,7 @@ environment :prod do
   set cookie: :crypto.hash(:sha256, System.get_env("COOKIE")) |> Base.encode16() |> String.to_atom()
 
   set config_providers: [
-    {Mix.Releases.Config.Providers.Elixir, ["/etc/spigot.config.exs"]}
+    {Mix.Releases.Config.Providers.Elixir, ["/etc/spigot/config.exs"]}
   ]
 end
 

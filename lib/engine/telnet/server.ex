@@ -7,6 +7,8 @@ defmodule Engine.Telnet.Server do
   alias Engine.Sessions
   alias Telnet.Options
 
+  require Logger
+
   @behaviour :ranch_protocol
 
   @impl true
@@ -64,6 +66,7 @@ defmodule Engine.Telnet.Server do
   end
 
   def handle_info(:terminate, state) do
+    Logger.info("Session terminating")
     send(state.foreman, :terminate)
     {:stop, :normal, state}
   end

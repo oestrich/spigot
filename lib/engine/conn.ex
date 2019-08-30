@@ -27,3 +27,14 @@ defmodule Engine.Conn.Event do
 
   defstruct [:topic, :data, type: :game]
 end
+
+defmodule Engine.Conn.Prompt do
+  @moduledoc """
+  An event to print the prompt
+
+  Used to determine if a new line should be sent before sending out
+  new text.
+  """
+
+  defstruct [:text]
+end

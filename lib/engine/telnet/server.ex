@@ -4,6 +4,7 @@ defmodule Engine.Telnet.Server do
   """
 
   alias Engine.Conn.Event
+  alias Engine.Conn.Prompt
   alias Engine.Sessions
   alias Telnet.Options
 
@@ -112,18 +113,26 @@ defmodule Engine.Telnet.Server do
     state
   end
 
+  defp push(state, %Prompt{text: data}) do
+    push_text(state, data)
+    state.transport.send(state.socket, <<255, 249>>)
+    update_newline(state, true)
+  end
+
   defp push(state, data) when is_binary(data) do
+    push_text(state, data)
+    state.transport.send(state.socket, <<255, 249>>)
+    update_newline(state, false)
+  end
+
+  defp push_text(state, text) do
     case state.options.newline do
       true ->
-        state.transport.send(state.socket, "\n" <> data)
+        state.transport.send(state.socket, "\n" <> text)
 
       false ->
-        state.transport.send(state.socket, data)
+        state.transport.send(state.socket, text)
     end
-
-    state.transport.send(state.socket, <<255, 249>>)
-
-    update_newline(state, String.last(data) == " ")
   end
 
   defp process_data(state, data) do

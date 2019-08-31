@@ -1,18 +1,20 @@
 defmodule Spigot.Core.CombatView do
   use Spigot, :view
 
+  import IO.ANSI, only: [reset: 0, yellow: 0]
+
   def render("start", _assigns) do
-    "Starting combat\n"
+    ~i"Starting combat\n"
   end
 
   def render("stop", _assigns) do
-    "Stopping combat\n"
+    ~i"Stopping combat\n"
   end
 
   def render("tick", _assigns) do
-    """
-    You attack the #{IO.ANSI.yellow()}enemy#{IO.ANSI.reset()}.
-    The #{IO.ANSI.yellow()}enemy#{IO.ANSI.reset()} attacks you.
+    ~i"""
+    You attack the #{yellow()}enemy#{reset()}.
+    The #{yellow()}enemy#{reset()} attacks you.
     """
   end
 end

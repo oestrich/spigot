@@ -73,7 +73,24 @@ defmodule Engine.Telnet.Server do
   end
 
   def handle_info({:send, data}, state) do
-    state = push(state, data)
+    data = List.wrap(data)
+
+    state =
+      Enum.reduce(data, state, fn data, state ->
+        push(state, data, %{})
+      end)
+
+    {:noreply, state}
+  end
+
+  def handle_info({:send, data, opts}, state) do
+    data = List.wrap(data)
+
+    state =
+      Enum.reduce(data, state, fn data, state ->
+        push(state, data, opts)
+      end)
+
     {:noreply, state}
   end
 
@@ -87,13 +104,7 @@ defmodule Engine.Telnet.Server do
     {:noreply, state}
   end
 
-  defp push(state, data_list) when is_list(data_list) do
-    Enum.reduce(data_list, state, fn data, state ->
-      push(state, data)
-    end)
-  end
-
-  defp push(state, output = %Event{type: :game}) do
+  defp push(state, output = %Event{type: :game}, _opts) do
     data = <<255, 250, 201>>
     data = data <> output.topic <> " "
     data = data <> Jason.encode!(output.data)
@@ -103,7 +114,7 @@ defmodule Engine.Telnet.Server do
     state
   end
 
-  defp push(state, output = %Event{type: :oauth}) do
+  defp push(state, output = %Event{type: :oauth}, _opts) do
     data = <<255, 250, 165>>
     data = data <> output.topic <> " "
     data = data <> Jason.encode!(output.data)
@@ -113,22 +124,27 @@ defmodule Engine.Telnet.Server do
     state
   end
 
-  defp push(state, %Prompt{text: data}) do
+  defp push(state, %Prompt{text: data}, _opts) do
     push_text(state, data)
     state.transport.send(state.socket, <<255, 249>>)
     update_newline(state, true)
   end
 
-  defp push(state, data) when is_binary(data) do
+  defp push(state, data, %{ga: true}) when is_binary(data) do
     push_text(state, data)
     state.transport.send(state.socket, <<255, 249>>)
+    update_newline(state, false)
+  end
+
+  defp push(state, data, _opts) do
+    push_text(state, data)
     update_newline(state, false)
   end
 
   defp push_text(state, text) do
     case state.options.newline do
       true ->
-        state.transport.send(state.socket, "\n" <> text)
+        state.transport.send(state.socket, ["\n", text])
 
       false ->
         state.transport.send(state.socket, text)

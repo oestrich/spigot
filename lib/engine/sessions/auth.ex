@@ -34,7 +34,7 @@ defmodule Engine.Sessions.Auth do
 
   @impl true
   def handle_info(:welcome, state) do
-    send(state.foreman, {:send, LoginView.render("welcome", %{})})
+    send(state.foreman, {:send, LoginView.render("welcome", %{}), ga: true})
     {:noreply, state}
   end
 

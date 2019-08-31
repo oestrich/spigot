@@ -21,7 +21,7 @@ defmodule Engine.View.Macro do
   end
 
   @doc """
-  Creates ~i() to create IO lists that look like standard interpolation
+  Creates ~i to create IO lists that look like standard interpolation
   """
   defmacro sigil_i({:<<>>, _, text}, _) do
     Enum.map(text, &sigil_i_unwrap/1)

@@ -25,6 +25,7 @@ defmodule Spigot.MixProject do
       {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
       {:distillery, "~> 2.0"},
       {:elixir_uuid, "~> 1.2"},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:httpoison, "~> 1.5"},
       {:gossip, "~> 1.3"},
       {:jason, "~> 1.1"},

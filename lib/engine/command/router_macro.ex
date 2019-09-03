@@ -6,7 +6,7 @@ defmodule Engine.Command.RouterMacro do
   @doc """
   Macro to generate the receive functions
 
-      scope(Spigot.Commands) do
+      scope(App.Commands) do
         module(Help) do
           command("help", :base)
           command("help :topic", :topic)

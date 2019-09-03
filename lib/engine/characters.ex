@@ -18,7 +18,7 @@ defmodule Engine.Characters do
 
       @doc false
       def start(opts) do
-        Engine.Characters.start(unquote(character), opts)
+        Engine.Characters.start(__MODULE__, unquote(character), opts)
       end
 
       @impl true
@@ -36,10 +36,10 @@ defmodule Engine.Characters do
   @doc """
   Start a new Character GenServer
   """
-  def start(character, opts) do
+  def start(module, character, opts) do
     case Players.whereis(opts[:name]) do
       nil ->
-        DynamicSupervisor.start_child(__MODULE__, {character, opts})
+        DynamicSupervisor.start_child(module, {character, opts})
 
       pid ->
         character.takeover(pid, opts)

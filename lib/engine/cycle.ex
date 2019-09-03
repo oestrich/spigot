@@ -1,6 +1,6 @@
-defmodule Engine.Bottle do
+defmodule Engine.Cycle do
   @moduledoc """
-  A bottle is a grouping of commands, actions, views, and a router.
+  A cycle is a grouping of commands, actions, views, and a router.
   """
 
   @typedoc """
@@ -9,7 +9,7 @@ defmodule Engine.Bottle do
   @type action() :: {atom(), [atom()]}
 
   @doc """
-  Get all actions that the bottle contains
+  Get all actions that the cycle contains
   """
   @callback actions() :: [action()]
 end

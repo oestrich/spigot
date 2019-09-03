@@ -1,11 +1,11 @@
-defmodule Spigot.Core.Bottle do
+defmodule Spigot.Core.Cycle do
   @moduledoc """
-  Core bottle
+  Core cycle
 
   Contains core commands of the game
   """
 
-  use Spigot, :bottle
+  use Spigot, :cycle
 
   alias Spigot.Core.CombatAction
   alias Spigot.Core.SayAction

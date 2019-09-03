@@ -24,12 +24,6 @@ defmodule Spigot do
     end
   end
 
-  def bottle() do
-    quote do
-      @behaviour Engine.Bottle
-    end
-  end
-
   def command() do
     quote do
       @view Engine.View.view_module(__MODULE__)
@@ -43,11 +37,9 @@ defmodule Spigot do
     end
   end
 
-  def view() do
+  def cycle() do
     quote do
-      import Engine.View.Macro
-
-      alias Engine.Conn.Event
+      @behaviour Engine.Cycle
     end
   end
 
@@ -63,6 +55,14 @@ defmodule Spigot do
       use GenServer
 
       import Engine.Sink
+    end
+  end
+
+  def view() do
+    quote do
+      import Engine.View.Macro
+
+      alias Engine.Conn.Event
     end
   end
 end

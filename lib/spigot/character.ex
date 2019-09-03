@@ -23,7 +23,7 @@ defmodule Spigot.Character do
 
   use Spigot, :sink
 
-  use_bottles([Spigot.Core, Spigot.Grapevine])
+  use_cycles([Spigot.Core, Spigot.Grapevine])
 
   alias Engine.Players
   alias Spigot.Character.Vitals

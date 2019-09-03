@@ -1,11 +1,11 @@
-defmodule Spigot.Grapevine.Bottle do
+defmodule Spigot.Grapevine.Cycle do
   @moduledoc """
-  Grapevine bottle
+  Grapevine cycle
 
   Contains commands related to the Grapevine chat network
   """
 
-  use Spigot, :bottle
+  use Spigot, :cycle
 
   alias Spigot.Grapevine.ChatAction
 

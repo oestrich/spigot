@@ -2,8 +2,8 @@ defmodule Spigot.Grapevine.Router do
   use Spigot, :router
 
   alias Engine.Command.Router
-  alias Engine.Gossip
   alias Spigot.Grapevine.ChatCommand
+  alias Spigot.Grapevine.Gossip
 
   @behaviour Engine.Command.Router
 

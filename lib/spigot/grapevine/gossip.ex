@@ -1,4 +1,4 @@
-defmodule Engine.Gossip do
+defmodule Spigot.Grapevine.Gossip do
   @moduledoc """
   Callback for core Gossip behaviour
   """

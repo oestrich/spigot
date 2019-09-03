@@ -11,7 +11,7 @@ config :spigot, :listener,
 config :logger, level: :info
 config :logger, :console, format: "$time $metadata[$level] $message\n"
 
-config :gossip, :callback_modules, core: Engine.Gossip
+config :gossip, :callback_modules, core: Spigot.Grapevine.Gossip
 
 if File.exists?("config/#{Mix.env()}.exs") do
   import_config "#{Mix.env()}.exs"

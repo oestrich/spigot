@@ -3,15 +3,28 @@ defmodule Engine.Help do
   Generate help from commands
   """
 
-  alias Spigot.Routers
-
   defstruct [:topic, :docs, :commands]
+
+  defmacro __using__(opts) do
+    routers = Keyword.get(opts, :routers)
+
+    quote do
+      def topics() do
+        Engine.Help.topics(unquote(routers))
+      end
+
+      def find(topic) do
+        Engine.Help.find(unquote(routers), topic)
+      end
+    end
+  end
 
   @doc """
   List all topics available
   """
-  def topics() do
-    commands()
+  def topics(routers) do
+    routers
+    |> commands()
     |> Enum.map(fn {command, _path, _fun} ->
       command
       |> to_string()
@@ -25,9 +38,9 @@ defmodule Engine.Help do
   @doc """
   View a single command's help file
   """
-  def find(topic) do
+  def find(routers, topic) do
     commands =
-      Enum.filter(commands(), fn {command, _path, _fun} ->
+      Enum.filter(commands(routers), fn {command, _path, _fun} ->
         command =
           command
           |> to_string()
@@ -53,8 +66,8 @@ defmodule Engine.Help do
     end
   end
 
-  defp commands() do
-    Routers.routers()
+  defp commands(routers) do
+    routers.routers()
     |> Enum.map(& &1.commands())
     |> List.flatten()
     |> Enum.sort_by(fn {command, _path, _fun} ->

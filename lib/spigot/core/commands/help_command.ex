@@ -5,7 +5,7 @@ defmodule Spigot.Core.HelpCommand do
 
   use Spigot, :command
 
-  alias Engine.Help
+  alias Spigot.Help
 
   @doc """
   List all topics available

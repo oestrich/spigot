@@ -7,12 +7,12 @@ defmodule Engine.Sessions.Session do
 
   use Supervisor
 
-  alias Engine.Characters
   alias Engine.Sessions.Auth
   alias Engine.Sessions.Commands
   alias Engine.Sessions.Foreman
   alias Engine.Sessions.Options
   alias Engine.Sessions.Tether
+  alias Spigot.Characters
 
   def start_link(opts) do
     Supervisor.start_link(__MODULE__, opts)

@@ -8,7 +8,7 @@ defmodule Spigot.Application do
   def start(_type, _args) do
     children = [
       {Engine.Players, [name: Engine.Players]},
-      {Engine.Characters, [name: Engine.Characters]},
+      {Spigot.Characters, [name: Spigot.Characters]},
       {Engine.Sessions, [name: Engine.Sessions]}
     ]
 

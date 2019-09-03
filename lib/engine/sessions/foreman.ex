@@ -91,6 +91,12 @@ defmodule Engine.Sessions.Foreman do
     :keep_state_and_data
   end
 
+  def handle_common(:info, {:send, telnet_data, opts}, data) do
+    opts = Enum.into(opts, %{})
+    send(data.protocol, {:send, telnet_data, opts})
+    :keep_state_and_data
+  end
+
   def handle_common(:info, :stop, data) do
     send(data.protocol, :terminate)
     :keep_state_and_data

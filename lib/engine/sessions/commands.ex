@@ -53,7 +53,7 @@ defmodule Engine.Sessions.Commands do
         {:noreply, state}
 
       conn ->
-        send(state.foreman, {:send, conn.lines})
+        send(state.foreman, {:send, conn.lines, ga: true})
 
         Enum.each(conn.messages, fn message ->
           forward(state, message)

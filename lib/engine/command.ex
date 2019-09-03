@@ -30,6 +30,6 @@ defmodule Engine.Command do
   end
 
   def render(conn, view, template, assigns) do
-    push(conn, view.render(template, Map.merge(conn.assigns, assigns)))
+    push(conn, [view.render(template, Map.merge(conn.assigns, assigns))])
   end
 end

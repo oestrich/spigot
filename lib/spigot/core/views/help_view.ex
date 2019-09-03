@@ -1,10 +1,12 @@
 defmodule Spigot.Core.HelpView do
   use Spigot, :view
 
+  import IO.ANSI, only: [reset: 0, white: 0]
+
   def render("base", %{topics: topics}) do
     topics =
       Enum.map(topics, fn topic ->
-        " - #{topic}\n"
+        ~i( - #{topic}\n)
       end)
 
     ~E"""
@@ -46,7 +48,7 @@ defmodule Spigot.Core.HelpView do
 
   def render("_command", %{command: {path, docs}}) do
     ~E"""
-    <%= IO.ANSI.white() %><%= path %><%= IO.ANSI.reset() %>
+    <%= white() %><%= path %><%= reset() %>
     <%= docs %>
     """
   end

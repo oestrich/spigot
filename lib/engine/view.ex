@@ -27,7 +27,7 @@ defmodule Engine.View.Macro do
     Enum.map(text, &sigil_i_unwrap/1)
   end
 
-  defp sigil_i_unwrap({:::, _, interpolation}) do
+  defp sigil_i_unwrap({:"::", _, interpolation}) do
     [text | _] = interpolation
     {_, _, text} = text
     text

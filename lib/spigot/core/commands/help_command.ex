@@ -20,12 +20,13 @@ defmodule Spigot.Core.HelpCommand do
   View a single command's help file
   """
   def topic(conn, %{"topic" => topic}) do
-    with {:ok, help} <- Help.find(topic) do
-      conn
-      |> render("topic.text", help)
-      |> render("topic.modal", help)
-      |> render(CommandsView, "prompt")
-    else
+    case Help.find(topic) do
+      {:ok, help} ->
+        conn
+        |> render("topic.text", help)
+        |> render("topic.modal", help)
+        |> render(CommandsView, "prompt")
+
       {:error, :not_found} ->
         conn
         |> render("unknown")

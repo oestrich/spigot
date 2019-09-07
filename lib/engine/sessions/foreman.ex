@@ -2,7 +2,7 @@ defmodule Engine.Sessions.Foreman do
   @moduledoc """
   Session Foreman
 
-  The in between process from `Engine.Telnet.Server` and the rest of
+  The in between process from `Engine.Listener.Protocol` and the rest of
   the processes. Starts the `Engine.Sessions.Options` process on boot.
   """
 

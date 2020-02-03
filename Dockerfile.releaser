@@ -1,4 +1,4 @@
-FROM elixir:1.8 as builder
+FROM grapevinehaus/elixir:1.9.4-1 as builder
 
 RUN mix local.rebar --force && \
     mix local.hex --force
@@ -12,11 +12,7 @@ RUN mix deps.compile
 
 FROM builder as releaser
 
-ARG sha
-ENV SHA=${sha}
-
-ARG cookie
-ENV COOKIE=${cookie}
-
 COPY . /app/
-RUN mix release --env=prod
+RUN mix release && \
+  cd _build/prod/rel/spigot/ && \
+  tar czf /opt/spigot.tar.gz .

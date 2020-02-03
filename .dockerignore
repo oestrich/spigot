@@ -13,7 +13,3 @@ releases
 
 # Generate on crash by the VM
 /erl_crash.dump
-
-# Static artifacts
-node_modules
-/priv

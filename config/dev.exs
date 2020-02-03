@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :spigot, :grapevine,
   host: "http://localhost:4100/",

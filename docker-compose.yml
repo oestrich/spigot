@@ -1,0 +1,10 @@
+# https://docs.docker.com/compose/compose-file/
+version: '3.6'
+services:
+  spigot:
+    build: .
+    ports:
+      - 4444:4444
+      - 4443:4443
+    volumes:
+      - ./docker-config:/etc/spigot

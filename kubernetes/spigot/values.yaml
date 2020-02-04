@@ -1,0 +1,9 @@
+image:
+  repository: grapevinehaus/spigot
+  # tag:
+  pullPolicy: IfNotPresent
+
+secrets:
+  spigotConfig: "spigot-config"
+
+resources: {}

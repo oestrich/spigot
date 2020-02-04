@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "spigot.fullname" . }}
+  labels:
+    {{- include "spigot.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "spigot.selectorLabels" . | nindent 4 }}
+  ports:
+    - port: 4444
+      targetPort: telnet
+      protocol: TCP
+      name: telnet

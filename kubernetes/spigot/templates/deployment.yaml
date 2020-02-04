@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "spigot.fullname" . }}
+  labels:
+    {{- include "spigot.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: "Recreate"
+  selector:
+    matchLabels:
+      {{- include "spigot.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "spigot.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: spigot-config
+              mountPath: "/etc/spigot"
+              readOnly: true
+          ports:
+            - name: telnet
+              containerPort: 4444
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: spigot-config
+          secret:
+            secretName: {{ .Values.secrets.spigotConfig }}
